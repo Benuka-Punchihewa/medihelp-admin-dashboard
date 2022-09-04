@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Grid } from "@mui/material";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.Fragment>
+      <Grid container spacing={3}>
+        <Grid item md={2} sx={{ background: "red" }}>
+          Sidebar
+        </Grid>
+        <Grid item md={10} sx={{ background: "red" }}>
+          body
+          {/* top navigation bar comes here */}
+          {/* views */}
+          <BrowserRouter>
+            <Routes>{/* <Route path="/" element={<Home />} /> */}</Routes>
+          </BrowserRouter>
+        </Grid>
+      </Grid>
+    </React.Fragment>
   );
-}
+};
 
 export default App;
