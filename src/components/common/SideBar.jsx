@@ -9,7 +9,6 @@ import {
   Logout,
   Person,
 } from "@mui/icons-material";
-
 import {
   Box,
   List,
@@ -30,8 +29,8 @@ const Sidebar = () => {
           sm: "block",
           background: colors.primary,
           color: colors.white,
-          height: "100%",
-          width: 250,
+          height: "100vh",
+          width: "20vw",
         },
       }}
     >
