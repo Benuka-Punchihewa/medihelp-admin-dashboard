@@ -2,21 +2,23 @@ import React from "react";
 import { Box, Grid, Stack } from "@mui/material";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Sidebar from "./components/common/SideBar";
+import NavBar from "./components/common/NavBar";
 
 const App = () => {
   return (
     <React.Fragment>
-      <Stack flexDirection="row">
+      <Stack flexDirection="row" sx={{width:'100%' ,display:'block'}}>
         <Box sx={{ width: 250 }}>
           <Sidebar />
         </Box>
-        <Box>
-          <Grid container spacing={3}>
-            <Grid item xs={12}></Grid>
+        <Box sx={{ }}>
+          <Grid container>
             <Grid item xs={12}>
-              body
-              {/* top navigation bar comes here */}
-              {/* views */}
+                <NavBar/>
+            </Grid>
+            <Grid item xs={12}>
+              
+              
               <BrowserRouter>
                 <Routes>{/* <Route path="/" element={<Home />} /> */}</Routes>
               </BrowserRouter>
