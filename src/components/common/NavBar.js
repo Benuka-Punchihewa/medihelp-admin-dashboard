@@ -11,7 +11,14 @@ const Icons = styled(Box)(({ theme }) => ({
 }));
 
 const NavBar = () => {
-  const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <React.Fragment>
@@ -33,15 +40,16 @@ const NavBar = () => {
           <Avatar
             sx={{ width: 30, height: 30 }}
             src="https://images.pexels.com/photos/846741/pexels-photo-846741.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-            onClick={(e) => setOpen(true)}
+            onClick={handleClick}
           />
         </Icons>
 
         <Menu
           id="demo-positioned-menu"
           aria-labelledby="demo-positioned-button"
+          anchorEl={anchorEl}
           open={open}
-          onClose={(e) => setOpen(false)}
+          onClose={handleClose}
           anchorOrigin={{
             vertical: "top",
             horizontal: "right",
@@ -58,6 +66,6 @@ const NavBar = () => {
       </Box>
     </React.Fragment>
   );
-}
+};
 
 export default NavBar;
