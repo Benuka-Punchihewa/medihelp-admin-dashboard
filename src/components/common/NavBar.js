@@ -10,7 +10,7 @@ const Icons = styled(Box)(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-function NavBar() {
+const NavBar = () => {
   const [open, setOpen] = useState(false);
 
   return (

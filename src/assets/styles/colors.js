@@ -3,6 +3,10 @@ const colors = {
   white: "#fff",
   secondary: "#ECEAEA",
   grey: "#706f6f",
+  purpal:"#772D8C",
+  green:"#1A9968",
+  darkGreen:"#236145",
+  darkPurpal:"#34143d",
 };
 
 export default colors;

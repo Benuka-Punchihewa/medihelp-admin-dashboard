@@ -38,13 +38,14 @@ const Sidebar = () => {
         <Stack
           direction="row"
           spacing={5}
-          justifyContent="flex-start"
-          alignItems="righ"
+          justifyContent="center"
+          textAlign="center"
+
           sx={{ height: "100%" }}
         >
           <Typography
             variant="h4"
-            sx={{ fontWeight: "bold", color: colors.white }}
+            sx={{ fontWeight: "bold", color: colors.white ,mt:2}}
           >
             MediHelp
           </Typography>
@@ -108,14 +109,6 @@ const Sidebar = () => {
             <ListItemText primary="Logout" />
           </ListItemButton>
         </ListItem>
-        {/* <ListItem disablePadding>
-              <ListItemButton component="a" href="#simple-list">
-                <ListItemIcon>
-                  <ModeNight />
-                </ListItemIcon>
-                <Switch onChange={e=>setMode(mode === "light" ? "dark" : "light")}/>
-              </ListItemButton>
-            </ListItem> */}
       </List>
     </Box>
   );
