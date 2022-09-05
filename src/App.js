@@ -10,6 +10,7 @@ import NavBar from "./components/common/NavBar";
 //view
 import Dashboard from "./views/Dashboard";
 import Pharmacy from "./views/Pharmacy";
+import GlobalMedicines from "./views/GlobalMedicines";
 
 
 const App = () => {
@@ -29,6 +30,7 @@ const App = () => {
                 <Routes>
                   <Route path="/" element={<Dashboard />} />
                   <Route path="/pharmacy" element={<Pharmacy />} />
+                  <Route path="/global-medicines" element={<GlobalMedicines />} />
                 </Routes>
               </BrowserRouter>
             </Grid>
