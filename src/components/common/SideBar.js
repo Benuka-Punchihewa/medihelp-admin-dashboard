@@ -41,7 +41,7 @@ const Sidebar = () => {
           justifyContent="center"
           textAlign="center"
 
-          sx={{ height: "100%" }}
+          sx={{ height: "100px" }}
         >
           <Typography
             variant="h4"
