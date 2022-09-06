@@ -3,7 +3,7 @@ import { Avatar, Badge, Box, Menu, MenuItem, styled } from "@mui/material";
 import React, { useState } from "react";
 import colors from "../../assets/styles/colors";
 
-const Icons = styled(Box)(({ theme }) => ({
+export const IconsWrapper = styled(Box)(({ theme }) => ({
   alignItems: "center",
   gap: "20px",
   display: "flex",
@@ -30,7 +30,7 @@ const NavBar = () => {
           p: 3,
         }}
       >
-        <Icons>
+        <IconsWrapper>
           <Badge badgeContent={4} color="error">
             <Mail />
           </Badge>
@@ -42,7 +42,7 @@ const NavBar = () => {
             src="https://images.pexels.com/photos/846741/pexels-photo-846741.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
             onClick={handleClick}
           />
-        </Icons>
+        </IconsWrapper>
 
         <Menu
           id="demo-positioned-menu"

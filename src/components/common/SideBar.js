@@ -40,12 +40,11 @@ const Sidebar = () => {
           spacing={5}
           justifyContent="center"
           textAlign="center"
-
           sx={{ height: "100px" }}
         >
           <Typography
             variant="h4"
-            sx={{ fontWeight: "bold", color: colors.white ,mt:2}}
+            sx={{ fontWeight: "bold", color: colors.white, mt: 2 }}
           >
             MediHelp
           </Typography>
@@ -78,7 +77,7 @@ const Sidebar = () => {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton component="a" href="#simple-list">
+          <ListItemButton component="a" href="/orders">
             <ListItemIcon sx={{ display: { color: colors.white } }}>
               <ShoppingBag />
             </ListItemIcon>
@@ -86,11 +85,11 @@ const Sidebar = () => {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton component="a" href="#simple-list">
+          <ListItemButton component="a" href="/global-medicines">
             <ListItemIcon sx={{ display: { color: colors.white } }}>
               <Vaccines />
             </ListItemIcon>
-            <ListItemText primary="Medicines" />
+            <ListItemText primary="Global Medicines" />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
