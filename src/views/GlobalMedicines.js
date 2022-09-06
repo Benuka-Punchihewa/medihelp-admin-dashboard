@@ -63,6 +63,7 @@ const GlobalMedicens = () => {
   const [tableRows, setTableRows] = useState([]);
   const [totalElements, setTotalElements] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -71,6 +72,7 @@ const GlobalMedicens = () => {
     const response = await createGlobalMedicine(inputs);
 
     if (response.success) {
+      setRefresh(!refresh);
       response?.data?.message &&
         popAlert("Success!", response?.data?.message, "success").then((res) => {
           setShowPopup(false);
@@ -151,12 +153,12 @@ const GlobalMedicens = () => {
     return () => {
       unmounted = true;
     };
-  }, [pagination]);
+  }, [pagination, refresh]);
 
 
   return (
     <React.Fragment>
-      <Typography variant="h5" fontWeight="bold" sx={{ mb: 2 }}>
+      <Typography variant="h4" fontWeight="bold" sx={{ mb: 2 }}>
         Global Medicines
       </Typography>
       <Grid container spacing={2}>
