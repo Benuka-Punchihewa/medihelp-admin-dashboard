@@ -13,7 +13,7 @@ const Pharmacy = () => {
 
   return (
     <React.Fragment>
-      <Typography variant="h3" fontWeight="bold" sx={{ mb: 2 }}>
+      <Typography variant="h5" fontWeight="bold" sx={{ mb: 2 }}>
         Pharmacies
       </Typography>
       <Grid container spacing={2}>

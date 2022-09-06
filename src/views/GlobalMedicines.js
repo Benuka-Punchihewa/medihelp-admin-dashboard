@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SearchBar from "../components/common/SearchBar";
 import AddButton from "../components/common/AddButton";
 import ReportButton from "../components/common/ReportButton";
@@ -11,18 +11,58 @@ import {
   CircularProgress,
   Button,
 } from "@mui/material";
-import PharmacyTable from "../components/pharmacy/PharmacyTable";
+
 import Popup from "../components/common/Popup";
 import globalMedicine from "../models/globalMedicine";
-import { createGlobalMedicine } from "../service/globalMedicines.service";
+import { createGlobalMedicine, getGlobalMedicines } from "../service/globalMedicines.service";
 import { popAlert } from "../utils/alerts";
 import colors from "../assets/styles/colors";
+import ReusableTable from "../components/common/ReusableTable";
+import TableAction from "../components/common/TableActions";
+
+
+ //table columns
+const tableColumns = [
+  {
+    id: "name",
+    label: "Name",
+    minWidth: 170,
+    align: "left",
+  },
+  
+  {
+    id: "brand",
+    label: "Brand",
+    minWidth: 170,
+    align: "right",
+  },
+  {
+    id: "strength",
+    label: "Strength",
+    minWidth: 170,
+    align: "right",
+  },
+  {
+    id: "action",
+    label: "Action",
+    minWidth: 170,
+    align: "right",
+  },
+];
 
 const GlobalMedicens = () => {
   const [inputs, setInputs] = useState(globalMedicine);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 10,
+    orderBy: "desc",
+  });
+  const [tableRows, setTableRows] = useState([]);
+  const [totalElements, setTotalElements] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,11 +87,76 @@ const GlobalMedicens = () => {
     setInputs(globalMedicine);
   };
 
+  const handleView = (id) => {
+    console.log(id);
+  };
+
+  const handleEdit = (id) => {
+    console.log(id);
+  };
+
+  const handleDelete = (id) => {
+    console.log(id);
+  };
+
+  const handlePageChange = (page) => {
+    setPagination({ ...pagination, page: page });
+  };
+
+  const handleLimitChange = (limit) => {
+    setPagination({ ...pagination, limit: limit });
+  };
+
+
+
   const handlePopupClose = () => setShowPopup(false);
+
+  useEffect(() => {
+    let unmounted = false;
+
+    if (!unmounted) setIsLoading(true);
+
+    const fetchAndSet = async () => {
+      const response = await getGlobalMedicines(
+        pagination.page,
+        pagination.limit,
+        pagination.orderBy
+      );
+
+      if (response.success) {
+        if (!response.data) return;
+
+        let tableDataArr = [];
+        for (const globalMedicine of response.data.content) {
+          tableDataArr.push({
+            name: globalMedicine.name,
+            brand: globalMedicine.brand,
+            strength: globalMedicine.strength,
+            action: <TableAction id={globalMedicine._id} onView={handleView} onEdit={handleEdit} onDelete={handleDelete}/>,
+          });
+        }
+
+        if (!unmounted) {
+          setTotalElements(response.data.totalElements);
+          setTableRows(tableDataArr);
+        }
+      } else {
+        console.error(response?.data);
+      }
+      if (!unmounted) setIsLoading(false);
+    };
+
+    fetchAndSet();
+
+    return () => {
+      unmounted = true;
+    };
+  }, [pagination]);
+
 
   return (
     <React.Fragment>
-      <Typography variant="h3" fontWeight="bold" sx={{ mb: 2 }}>
+      <Typography variant="h5" fontWeight="bold" sx={{ mb: 2 }}>
         Global Medicines
       </Typography>
       <Grid container spacing={2}>
@@ -65,16 +170,39 @@ const GlobalMedicens = () => {
           <ReportButton />
         </Grid>
       </Grid>
-      <Box
-        sx={{
-          width: "100%",
-          backgroundColor: "#fff",
-          boxShadow: "0px 8px 25px rgba(0, 0, 0, 0.25)",
-          mt: "3%",
-        }}
-      >
-        <PharmacyTable />
-      </Box>
+
+      {isLoading ? (
+        <Box
+          sx={{
+            width: "100%",
+            mt: "3%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <CircularProgress sx={{ mr: 2 }} />
+          Loading...
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            width: "100%",
+            backgroundColor: "#fff",
+            boxShadow: "0px 8px 25px rgba(0, 0, 0, 0.25)",
+            mt: "3%",
+          }}
+        >
+          <ReusableTable
+            rows={tableRows}
+            columns={tableColumns}
+            totalElements={totalElements}
+            onPageChange={handlePageChange}
+            onLimitChange={handleLimitChange}
+          />
+        </Box>
+      )}
+      
 
       {/* custom popup */}
       <Popup
