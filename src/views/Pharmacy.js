@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import SearchBar from "../components/common/SearchBar";
 import AddButton from "../components/common/AddButton";
 import ReportButton from "../components/common/ReportButton";
@@ -13,16 +13,19 @@ import {
 import Popup from "../components/common/Popup";
 import ReusableTable from "../components/common/ReusableTable"
 import addPharmacy from "../models/addPharmacy";
-import {createPharmacy} from "../service/addPharmacy.service";
+import {createPharmacy , getallPharmacies} from "../service/addPharmacy.service";
 import { popAlert } from "../utils/alerts";
 import colors from "../assets/styles/colors";
+import TableAction from "../components/common/TableActions";
 
+
+//table columns
 const tableColumns = [
   {
     id: "name",
     label: "Name",
     minWidth: 170,
-    format: (value) => `#${value}`,
+    align:"left",
   },
   
   {
@@ -46,14 +49,21 @@ const tableColumns = [
 ];
 
 const Pharmacy = () => {
+  const [inputs, setInputs] = useState(addPharmacy);
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 10,
+    orderBy: "desc",
+  });
   const [tableRows, setTableRows] = useState([]);
   const [totalElements, setTotalElements] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-
-  const [inputs, setInputs] = useState(addPharmacy);
-  const [errors, setErrors] = useState({});
+  const [refresh, setRefresh] = useState(false);
   
-  const [loading, setLoading] = useState(false);
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -62,6 +72,7 @@ const Pharmacy = () => {
     const response = await createPharmacy(inputs);
 
     if (response.success) {
+      setRefresh(!refresh);
       response?.data?.message &&
         popAlert("Success!", response?.data?.message, "success").then((res) => {
           setShowPopup(false);
@@ -75,28 +86,65 @@ const Pharmacy = () => {
   };
 
   const handleClear = () => {
-    setInputs(createPharmacy);
+    setInputs(addPharmacy);
   };
+ 
+  const handleView = (id) =>{
+    console.log(id);
+  }
 
-  const handlePopupClose = () => setShowPopup(false);
-
-
-  const [showPopup, setShowPopup] = useState(false);
-  const [pagination, setPagination] = useState({
-    page: 1,
-    limit: 10,
-    orderBy: "desc",
-  });
-
-  
-
-  
   const handlePageChange = (page) => {
     setPagination({ ...pagination, page: page });
   };
   const handleLimitChange = (limit) => {
     setPagination({ ...pagination, limit: limit });
   };
+
+  const handlePopupClose = () => setShowPopup(false);
+
+  useEffect(() => {
+    let unmounted = false;
+
+    if (!unmounted) setIsLoading(true);
+
+    const fetchAndSet = async () => {
+      const response = await getallPharmacies(
+        pagination.page,
+        pagination.limit,
+        pagination.orderBy
+      );
+
+      if (response.success) {
+        if (!response.data) return;
+
+        let tableDataArr = [];
+        for (const addPharmacy of response.data.content) {
+          tableDataArr.push({
+            name: addPharmacy.name,
+            registrationNumber: addPharmacy.registrationNumber,
+            address: addPharmacy.address,
+            contactNumber: addPharmacy.contactNumber,
+            action: <TableAction id={addPharmacy._id} onView={handleView}/>,
+          });
+        }
+
+        if (!unmounted) {
+          setTotalElements(response.data.totalElements);
+          setTableRows(tableDataArr);
+        }
+      } else {
+        console.error(response?.data);
+      }
+      if (!unmounted) setIsLoading(false);
+    };
+
+    fetchAndSet();
+
+    return () => {
+      unmounted = true;
+    };
+  }, [pagination, refresh]);
+
 
   return (
     <React.Fragment>
@@ -115,7 +163,21 @@ const Pharmacy = () => {
         </Grid>
       </Grid>
 
-      <Box
+      {isLoading ? (
+        <Box
+          sx={{
+            width: "100%",
+            mt: "3%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <CircularProgress sx={{ mr: 2 }} />
+          Loading...
+        </Box>
+      ) : (
+        <Box
           sx={{
             width: "100%",
             backgroundColor: "#fff",
@@ -131,6 +193,8 @@ const Pharmacy = () => {
             onLimitChange={handleLimitChange}
           />
         </Box>
+      )}
+      
         
 
       {/* custom popup */}
@@ -232,7 +296,6 @@ const Pharmacy = () => {
                 <Typography color="error">{errors["email"]}</Typography>
               )}
             </Box>
-
             <Box sx={{ mb: 2 }}>
               <TextField
                 name="location"
