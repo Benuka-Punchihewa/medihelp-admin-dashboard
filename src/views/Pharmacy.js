@@ -21,18 +21,19 @@ import TableAction from "../components/common/TableActions";
 
 //table columns
 const tableColumns = [
-  {
-    id: "name",
-    label: "Name",
-    minWidth: 170,
-    align:"left",
-  },
-  
+
   {
     id: "registrationNumber",
     label: "Reg Number",
     minWidth: 170,
-    align: "right",
+    align: "left",
+  },
+
+  {
+    id: "name",
+    label: "Name",
+    minWidth: 170,
+    align:"right",
   },
   {
     id: "contactNumber",
