@@ -113,7 +113,7 @@ const Orders = () => {
 
   return (
     <React.Fragment>
-      <Typography variant="h3" fontWeight="bold" sx={{ mb: 2 }}>
+      <Typography variant="h4" fontWeight="bold" sx={{ mb: 2 }}>
         Orders
       </Typography>
       <Grid container spacing={2}>
