@@ -54,6 +54,7 @@ const Orders = () => {
   const [tableRows, setTableRows] = useState([]);
   const [totalElements, setTotalElements] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [keyword, setKeyword] = useState("");
 
   const handlePopupClose = () => setShowPopup(false);
 
@@ -64,8 +65,13 @@ const Orders = () => {
   const handlePageChange = (page) => {
     setPagination({ ...pagination, page: page });
   };
+
   const handleLimitChange = (limit) => {
     setPagination({ ...pagination, limit: limit });
+  };
+
+  const handleSearch = (input) => {
+    setKeyword(input);
   };
 
   useEffect(() => {
@@ -78,7 +84,8 @@ const Orders = () => {
         selectedPharmacyId,
         pagination.page,
         pagination.limit,
-        pagination.orderBy
+        pagination.orderBy,
+        keyword
       );
 
       if (response.success) {
@@ -109,7 +116,7 @@ const Orders = () => {
     return () => {
       unmounted = true;
     };
-  }, [pagination, selectedPharmacyId]);
+  }, [pagination, selectedPharmacyId, keyword]);
 
   return (
     <React.Fragment>
@@ -133,7 +140,10 @@ const Orders = () => {
           />
         </Grid>
         <Grid item xs={6}>
-          <SearchBar />
+          <SearchBar
+            onSearch={handleSearch}
+            placeholderText="Search Orders..."
+          />
         </Grid>
         <Grid item xs={1}>
           <AddButton onClick={() => setShowPopup(true)} />

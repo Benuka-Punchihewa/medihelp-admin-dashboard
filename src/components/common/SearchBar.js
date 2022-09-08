@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 
 import { styled } from "@mui/material/styles";
 import { TextField, Button, Box } from "@mui/material";
@@ -9,7 +9,8 @@ const SerachBox = styled(Box)(({ theme }) => ({
   borderRadius: "5px 0px 0px 5px",
 }));
 
-const SearchBar = () => {
+const SearchBar = ({ placeholderText, onSearch }) => {
+  const [input, setInput] = useState("");
   return (
     <React.Fragment>
       <SerachBox>
@@ -25,10 +26,9 @@ const SearchBar = () => {
             boxShadow: "0px 8px 25px rgba(0, 0, 0, 0.25)",
           }}
           height="76px"
-          // value={search}
-          // onChange={(e)=> setSearch(e.target.value.toLowerCase())}
-          placeholder="Search Pharmacies.."
+          placeholder={placeholderText || "Search..."}
           type="text"
+          onChange={(e) => setInput(e.target.value)}
         />
         <Button
           variant="contained"
@@ -41,7 +41,7 @@ const SearchBar = () => {
             height: "56px",
             color: "#ffff",
           }}
-          // onClick={handleSearch}
+          onClick={() => onSearch(input)}
         >
           Search
         </Button>

@@ -104,6 +104,8 @@ const Pharmacy = () => {
 
   const handlePopupClose = () => setShowPopup(false);
 
+  const handleSearch = (input) => {};
+
   useEffect(() => {
     let unmounted = false;
 
@@ -155,7 +157,10 @@ const Pharmacy = () => {
       </Typography>
       <Grid container spacing={2}>
         <Grid item xs={10}>
-          <SearchBar />
+          <SearchBar
+            onSearch={handleSearch}
+            placeholderText="Search Pharmacy..."
+          />
         </Grid>
         <Grid item xs={1}>
           <AddButton onClick={() => setShowPopup(true)} />

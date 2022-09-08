@@ -14,14 +14,16 @@ import {
 
 import Popup from "../components/common/Popup";
 import globalMedicine from "../models/globalMedicine";
-import { createGlobalMedicine, getGlobalMedicines } from "../service/globalMedicines.service";
+import {
+  createGlobalMedicine,
+  getGlobalMedicines,
+} from "../service/globalMedicines.service";
 import { popAlert } from "../utils/alerts";
 import colors from "../assets/styles/colors";
 import ReusableTable from "../components/common/ReusableTable";
 import TableAction from "../components/common/TableActions";
 
-
- //table columns
+//table columns
 const tableColumns = [
   {
     id: "name",
@@ -29,7 +31,7 @@ const tableColumns = [
     minWidth: 170,
     align: "left",
   },
-  
+
   {
     id: "brand",
     label: "Brand",
@@ -109,7 +111,7 @@ const GlobalMedicens = () => {
     setPagination({ ...pagination, limit: limit });
   };
 
-
+  const handleSearch = (input) => {};
 
   const handlePopupClose = () => setShowPopup(false);
 
@@ -134,7 +136,14 @@ const GlobalMedicens = () => {
             name: globalMedicine.name,
             brand: globalMedicine.brand,
             strength: globalMedicine.strength,
-            action: <TableAction id={globalMedicine._id} onView={handleView} onEdit={handleEdit} onDelete={handleDelete}/>,
+            action: (
+              <TableAction
+                id={globalMedicine._id}
+                onView={handleView}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            ),
           });
         }
 
@@ -155,7 +164,6 @@ const GlobalMedicens = () => {
     };
   }, [pagination, refresh]);
 
-
   return (
     <React.Fragment>
       <Typography variant="h4" fontWeight="bold" sx={{ mb: 2 }}>
@@ -163,7 +171,10 @@ const GlobalMedicens = () => {
       </Typography>
       <Grid container spacing={2}>
         <Grid item xs={10}>
-          <SearchBar />
+          <SearchBar
+            onSearch={handleSearch}
+            placeholderText="Search Global Medicines..."
+          />
         </Grid>
         <Grid item xs={1}>
           <AddButton onClick={() => setShowPopup(true)} />
@@ -204,7 +215,6 @@ const GlobalMedicens = () => {
           />
         </Box>
       )}
-      
 
       {/* custom popup */}
       <Popup
