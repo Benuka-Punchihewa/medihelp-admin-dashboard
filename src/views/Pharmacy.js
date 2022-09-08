@@ -1,27 +1,29 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import SearchBar from "../components/common/SearchBar";
 import AddButton from "../components/common/AddButton";
 import ReportButton from "../components/common/ReportButton";
-import { 
-  Grid, 
-  Box, 
-  Typography ,
+import {
+  Grid,
+  Box,
+  Typography,
   CircularProgress,
   TextField,
   Button,
 } from "@mui/material";
 import Popup from "../components/common/Popup";
-import ReusableTable from "../components/common/ReusableTable"
+import ReusableTable from "../components/common/ReusableTable";
 import addPharmacy from "../models/addPharmacy";
-import {createPharmacy , getallPharmacies} from "../service/addPharmacy.service";
+import {
+  createPharmacy,
+  getallPharmacies,
+} from "../service/addPharmacy.service";
 import { popAlert } from "../utils/alerts";
 import colors from "../assets/styles/colors";
 import TableAction from "../components/common/TableActions";
-
+import { useNavigate } from "react-router-dom";
 
 //table columns
 const tableColumns = [
-
   {
     id: "registrationNumber",
     label: "Reg Number",
@@ -33,7 +35,7 @@ const tableColumns = [
     id: "name",
     label: "Name",
     minWidth: 170,
-    align:"right",
+    align: "right",
   },
   {
     id: "contactNumber",
@@ -50,6 +52,7 @@ const tableColumns = [
 ];
 
 const Pharmacy = () => {
+  const navigate = useNavigate();
   const [inputs, setInputs] = useState(addPharmacy);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -63,8 +66,6 @@ const Pharmacy = () => {
   const [totalElements, setTotalElements] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
-  
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -89,10 +90,10 @@ const Pharmacy = () => {
   const handleClear = () => {
     setInputs(addPharmacy);
   };
- 
-  const handleView = (id) =>{
-    console.log(id);
-  }
+
+  const handleView = (id) => {
+    navigate(`/pharmacy/${id}`);
+  };
 
   const handlePageChange = (page) => {
     setPagination({ ...pagination, page: page });
@@ -125,7 +126,7 @@ const Pharmacy = () => {
             registrationNumber: addPharmacy.registrationNumber,
             address: addPharmacy.address,
             contactNumber: addPharmacy.contactNumber,
-            action: <TableAction id={addPharmacy._id} onView={handleView}/>,
+            action: <TableAction id={addPharmacy._id} onView={handleView} />,
           });
         }
 
@@ -144,8 +145,8 @@ const Pharmacy = () => {
     return () => {
       unmounted = true;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination, refresh]);
-
 
   return (
     <React.Fragment>
@@ -195,8 +196,6 @@ const Pharmacy = () => {
           />
         </Box>
       )}
-      
-        
 
       {/* custom popup */}
       <Popup
@@ -230,7 +229,7 @@ const Pharmacy = () => {
                 name="registrationNumber"
                 variant="filled"
                 label="Enter Registration Number"
-                  fullWidth
+                fullWidth
                 value={inputs.registrationNumber}
                 onChange={(e) =>
                   setInputs({
@@ -240,7 +239,9 @@ const Pharmacy = () => {
                 }
               />
               {errors["registrationNumber"] && (
-                <Typography color="error">{errors["registrationNumber"]}</Typography>
+                <Typography color="error">
+                  {errors["registrationNumber"]}
+                </Typography>
               )}
             </Box>
             <Box sx={{ mb: 2 }}>
@@ -315,7 +316,7 @@ const Pharmacy = () => {
                 <Typography color="error">{errors["location"]}</Typography>
               )}
             </Box>
-           
+
             <Box sx={{ mb: 2, display: "flex", justifyContent: "flex-end" }}>
               <Button
                 type="reset"

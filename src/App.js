@@ -11,6 +11,7 @@ import Dashboard from "./views/Dashboard";
 import Pharmacy from "./views/Pharmacy";
 import GlobalMedicines from "./views/GlobalMedicines";
 import Orders from "./views/Orders";
+import PharmacyProfile from "./views/PharmacyProfile";
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
                 <Routes>
                   <Route path="/" element={<Dashboard />} />
                   <Route path="/pharmacy" element={<Pharmacy />} />
+                  <Route path="/pharmacy/:id" element={<PharmacyProfile/>} />
                   <Route
                     path="/global-medicines"
                     element={<GlobalMedicines />}
