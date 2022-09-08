@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import {
   Typography,
   Box,
@@ -62,6 +62,11 @@ const PharmacyProfile = () => {
   };
 
   const handlePopupClose = () => setShowPopup(false);
+
+  const memoizedLabel = useMemo(
+    () => globalMedicines.find((medi) => medi.id === id)?.label || "",
+    [inputs.globalMedicine._id]
+  );
 
   const throttle = (func, time) => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -199,11 +204,17 @@ const PharmacyProfile = () => {
                 isOptionEqualToValue={(option, value) =>
                   option.name === value.name
                 }
+                value={memoizedLabel}
                 onChange={(event, value) => {
                   if (value?.id) {
                     setInputs({
                       ...inputs,
                       globalMedicine: { _id: value.id },
+                    });
+                  } else {
+                    setInputs({
+                      ...inputs,
+                      globalMedicine: { _id: "" },
                     });
                   }
                 }}

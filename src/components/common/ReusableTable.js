@@ -33,9 +33,7 @@ export default function ReusableTable({
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
-      <TableContainer
-        sx={{ maxHeight: 440, boxShadow: "0px 8px 25px rgba(0, 0, 0, 0.25)" }}
-      >
+      <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead
             sx={{
