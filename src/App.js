@@ -11,6 +11,7 @@ import Dashboard from "./views/Dashboard";
 import Pharmacy from "./views/Pharmacy";
 import GlobalMedicines from "./views/GlobalMedicines";
 import Orders from "./views/Orders";
+import SignIn from "./views/SignIn";
 
 const App = () => {
   return (
@@ -34,6 +35,7 @@ const App = () => {
                     element={<GlobalMedicines />}
                   />
                   <Route path="/orders" element={<Orders />} />
+                  <Route path="/sign-in" element={<SignIn/>}/>
                 </Routes>
               </BrowserRouter>
             </Grid>

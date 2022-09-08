@@ -100,7 +100,7 @@ const Sidebar = () => {
             <ListItemText primary="Payments" />
           </ListItemButton>
         </ListItem>
-        <ListItem disablePadding>
+        <ListItem disablePadding sx={{mt:20}}>
           <ListItemButton component="a" href="#simple-list">
             <ListItemIcon sx={{ display: { color: colors.white } }}>
               <Logout />
