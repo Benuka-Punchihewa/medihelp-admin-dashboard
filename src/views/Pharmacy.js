@@ -1,27 +1,28 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import SearchBar from "../components/common/SearchBar";
 import AddButton from "../components/common/AddButton";
 import ReportButton from "../components/common/ReportButton";
-import { 
-  Grid, 
-  Box, 
-  Typography ,
+import {
+  Grid,
+  Box,
+  Typography,
   CircularProgress,
   TextField,
   Button,
 } from "@mui/material";
 import Popup from "../components/common/Popup";
-import ReusableTable from "../components/common/ReusableTable"
+import ReusableTable from "../components/common/ReusableTable";
 import addPharmacy from "../models/addPharmacy";
-import {createPharmacy , getallPharmacies} from "../service/addPharmacy.service";
+import {
+  createPharmacy,
+  getallPharmacies,
+} from "../service/addPharmacy.service";
 import { popAlert } from "../utils/alerts";
 import colors from "../assets/styles/colors";
 import TableAction from "../components/common/TableActions";
 
-
 //table columns
 const tableColumns = [
-
   {
     id: "registrationNumber",
     label: "Reg Number",
@@ -33,7 +34,7 @@ const tableColumns = [
     id: "name",
     label: "Name",
     minWidth: 170,
-    align:"right",
+    align: "right",
   },
   {
     id: "contactNumber",
@@ -63,8 +64,6 @@ const Pharmacy = () => {
   const [totalElements, setTotalElements] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
-  
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -89,10 +88,10 @@ const Pharmacy = () => {
   const handleClear = () => {
     setInputs(addPharmacy);
   };
- 
-  const handleView = (id) =>{
+
+  const handleView = (id) => {
     console.log(id);
-  }
+  };
 
   const handlePageChange = (page) => {
     setPagination({ ...pagination, page: page });
@@ -102,6 +101,8 @@ const Pharmacy = () => {
   };
 
   const handlePopupClose = () => setShowPopup(false);
+
+  const handleSearch = (input) => {};
 
   useEffect(() => {
     let unmounted = false;
@@ -125,7 +126,7 @@ const Pharmacy = () => {
             registrationNumber: addPharmacy.registrationNumber,
             address: addPharmacy.address,
             contactNumber: addPharmacy.contactNumber,
-            action: <TableAction id={addPharmacy._id} onView={handleView}/>,
+            action: <TableAction id={addPharmacy._id} onView={handleView} />,
           });
         }
 
@@ -146,7 +147,6 @@ const Pharmacy = () => {
     };
   }, [pagination, refresh]);
 
-
   return (
     <React.Fragment>
       <Typography variant="h4" fontWeight="bold" sx={{ mb: 2 }}>
@@ -154,7 +154,10 @@ const Pharmacy = () => {
       </Typography>
       <Grid container spacing={2}>
         <Grid item xs={10}>
-          <SearchBar />
+          <SearchBar
+            onSearch={handleSearch}
+            placeholderText="Search Pharmacy..."
+          />
         </Grid>
         <Grid item xs={1}>
           <AddButton onClick={() => setShowPopup(true)} />
@@ -195,8 +198,6 @@ const Pharmacy = () => {
           />
         </Box>
       )}
-      
-        
 
       {/* custom popup */}
       <Popup
@@ -230,7 +231,7 @@ const Pharmacy = () => {
                 name="registrationNumber"
                 variant="filled"
                 label="Enter Registration Number"
-                  fullWidth
+                fullWidth
                 value={inputs.registrationNumber}
                 onChange={(e) =>
                   setInputs({
@@ -240,7 +241,9 @@ const Pharmacy = () => {
                 }
               />
               {errors["registrationNumber"] && (
-                <Typography color="error">{errors["registrationNumber"]}</Typography>
+                <Typography color="error">
+                  {errors["registrationNumber"]}
+                </Typography>
               )}
             </Box>
             <Box sx={{ mb: 2 }}>
@@ -315,7 +318,7 @@ const Pharmacy = () => {
                 <Typography color="error">{errors["location"]}</Typography>
               )}
             </Box>
-           
+
             <Box sx={{ mb: 2, display: "flex", justifyContent: "flex-end" }}>
               <Button
                 type="reset"
