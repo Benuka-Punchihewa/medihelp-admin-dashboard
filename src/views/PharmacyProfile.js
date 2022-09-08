@@ -1,30 +1,39 @@
-import React, { useState, useEffect } from 'react';
-import { Typography, Box, Stack, Grid, Autocomplete, Button, TextField, CircularProgress  } from '@mui/material';
+import React, { useState, useEffect, useRef } from "react";
+import {
+  Typography,
+  Box,
+  Stack,
+  Grid,
+  Autocomplete,
+  Button,
+  TextField,
+  CircularProgress,
+} from "@mui/material";
 import colors from "../assets/styles/colors";
-import SearchBar from '../components/common/SearchBar';
+import SearchBar from "../components/common/SearchBar";
 import AddButton from "../components/common/AddButton";
 //import ReusableTable from "../components/common/ReusableTable";
 //import TableAction from "../components/common/TableActions";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 import { getGlobalMedicines } from "../service/globalMedicines.service";
 import { createMedicine } from "../service/medicine.service";
 import { popAlert } from "../utils/alerts";
-import medicine from '../models/medicine';
+import medicine from "../models/medicine";
 import Popup from "../components/common/Popup";
 
-
 const PharmacyProfile = () => {
-  const {id} = useParams();
-  console.log(id);
+  const { id } = useParams();
+  const timeoutRef = useRef(null);
 
   const [inputs, setInputs] = useState(medicine);
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [isSelectDataLoading, setIsSelectDataLoading] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [refresh, setRefresh] = useState(false);
 
   // select medicine
-  const [globalMedicines, setGlobalMedicines] = useState();
+  const [globalMedicines, setGlobalMedicines] = useState([]);
   const [open, setOpen] = useState(false);
   const [keyword, setKeyword] = useState("");
 
@@ -52,36 +61,29 @@ const PharmacyProfile = () => {
     setInputs(medicine);
   };
 
-
-
-
   const handlePopupClose = () => setShowPopup(false);
+
+  const throttle = (func, time) => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(func, time);
+  };
 
   //select medicine
   useEffect(() => {
     let unmounted = false;
 
-    if (!unmounted) setIsLoading(true);
+    if (!unmounted && open) setIsSelectDataLoading(true);
 
     const fetchAndSet = async () => {
-      const response = await getGlobalMedicines(
-        1,
-        20,
-        "desc",
-        keyword
-      );
+      const response = await getGlobalMedicines(1, 20, "desc", keyword);
 
       if (response.success) {
         if (!response.data) return;
 
-        let gMedicineArr = []
+        let gMedicineArr = [];
 
         for (const gMedicine of response.data.content) {
-            
-          gMedicineArr.push(
-
-            { label: gMedicine.name, id: gMedicine._id }
-            )
+          gMedicineArr.push({ label: gMedicine.name, id: gMedicine._id });
         }
 
         if (!unmounted) {
@@ -90,96 +92,92 @@ const PharmacyProfile = () => {
       } else {
         console.error(response?.data);
       }
-      if (!unmounted) setIsLoading(false);
+      if (!unmounted) setIsSelectDataLoading(false);
     };
-    fetchAndSet();
+
+    if (open) throttle(() => fetchAndSet(), 500);
 
     return () => {
       unmounted = true;
     };
-  }, [keyword]);
+  }, [keyword, open]);
 
-  React.useEffect(() => {
-    if (!open) {
+  useEffect(() => {
+    let unmounted = false;
+
+    if (!open && !unmounted) {
       setGlobalMedicines([]);
     }
+
+    return () => {
+      unmounted = true;
+    };
   }, [open]);
-  
 
   return (
     <React.Fragment>
-        <Typography variant="h4" fontWeight="bold" sx={{ mb: 2 }}>
+      <Typography variant="h4" fontWeight="bold" sx={{ mb: 2 }}>
         Pharamacy Profile
-        </Typography>
-        
-        <Box
-          sx={{
-            borderRadius: 4,
-            backgroundColor: colors.secondary,
-            boxShadow: "0px 8px 25px rgba(0, 0, 0, 0.25)",
-            p: 1,
-          }}
-            >
-          
-          <Stack flexDirection="row" alignItems="center">
-            <img
-              src="https://img.freepik.com/free-photo/young-woman-pharmacist-pharmacy_1303-25541.jpg?w=2000"
-              alt=""
-              style={{
-                width: 100,
-                height: 100,
-                objectFit: "cover",
-                borderRadius: 5,
-              }}
-            />
+      </Typography>
 
-            <Grid container sx={{ ml: 5 }}>
-              <Grid item xs={12} md={6}>
-                <Box sx={{ marginBottom: "5px" , fontWeight: "bold"}}>
-                  <Typography variant="p" >
-                  Samarashingha Pharamacy
-                  </Typography>
-                </Box>
+      <Box
+        sx={{
+          borderRadius: 4,
+          backgroundColor: colors.secondary,
+          boxShadow: "0px 8px 25px rgba(0, 0, 0, 0.25)",
+          p: 1,
+        }}
+      >
+        <Stack flexDirection="row" alignItems="center">
+          <img
+            src="https://img.freepik.com/free-photo/young-woman-pharmacist-pharmacy_1303-25541.jpg?w=2000"
+            alt=""
+            style={{
+              width: 100,
+              height: 100,
+              objectFit: "cover",
+              borderRadius: 5,
+            }}
+          />
 
-                <Box>
-                  <Typography variant="p" >
-                   RG-GMP-001
-                  </Typography>
-                </Box>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Box sx={{ marginBottom: "5px" }}>
-                  <Typography variant="p" >
-                  42/1A, Apple Rd., Pineapple
-                  </Typography>
-                </Box>
+          <Grid container sx={{ ml: 5 }}>
+            <Grid item xs={12} md={6}>
+              <Box sx={{ marginBottom: "5px", fontWeight: "bold" }}>
+                <Typography variant="p">Samarashingha Pharamacy</Typography>
+              </Box>
 
-                <Box >
-                  <Typography variant="p" >
-                    0712704856
-                  </Typography>
-                </Box>
-
-              </Grid>
+              <Box>
+                <Typography variant="p">RG-GMP-001</Typography>
+              </Box>
             </Grid>
-          </Stack>
-        </Box>
+            <Grid item xs={12} md={6}>
+              <Box sx={{ marginBottom: "5px" }}>
+                <Typography variant="p">42/1A, Apple Rd., Pineapple</Typography>
+              </Box>
 
-        <Typography variant="h5" fontWeight="bold" sx={{ mb: 2, mt:4}}>
+              <Box>
+                <Typography variant="p">0712704856</Typography>
+              </Box>
+            </Grid>
+          </Grid>
+        </Stack>
+      </Box>
+
+      <Typography variant="h5" fontWeight="bold" sx={{ mb: 2, mt: 4 }}>
         Medicines
-        </Typography>
+      </Typography>
 
-        <Grid container spacing={2} >
-            <Grid item xs={11}>
-            <SearchBar />
-            </Grid>
-
-            <Grid item xs={1}>
-            <AddButton onClick={() => setShowPopup(true)}/> {/**/}
-            </Grid>
+      <Grid container spacing={2}>
+        <Grid item xs={11}>
+          <SearchBar />
         </Grid>
-        
-        {/* custom popup */}
+
+        <Grid item xs={1}>
+          <AddButton onClick={() => setShowPopup(true)} /> {/**/}
+        </Grid>
+      </Grid>
+
+      {/* custom popup */}
       <Popup
         title="Add Medicine"
         width={800}
@@ -188,7 +186,6 @@ const PharmacyProfile = () => {
       >
         <Box sx={{ mb: 2 }}>
           <form onSubmit={handleSubmit}>
-
             <Box sx={{ mb: 2 }}>
               <Autocomplete
                 id="combo-box-demo"
@@ -199,27 +196,38 @@ const PharmacyProfile = () => {
                 onClose={() => {
                   setOpen(false);
                 }}
-                isOptionEqualToValue={(option, value) => option.name === value.name}
+                isOptionEqualToValue={(option, value) =>
+                  option.name === value.name
+                }
                 onChange={(event, value) => {
-                  console.log(event);
-                  }}
+                  if (value?.id) {
+                    setInputs({
+                      ...inputs,
+                      globalMedicine: { _id: value.id },
+                    });
+                  }
+                }}
                 options={globalMedicines}
                 loading={isLoading}
-                onInputChange={(event,inputValue) => {
-                    setKeyword(inputValue);
-                    }}
+                onInputChange={(event, inputValue) => {
+                  setKeyword(inputValue);
+                }}
                 renderInput={(params) => (
-                  <TextField {...params} label="Select Medicine" 
-                  InputProps={{
-                    ...params.InputProps,
-                    endAdornment: (
-                      <React.Fragment>
-                        {isLoading ? <CircularProgress color="inherit" size={20} /> : null}
-                        {params.InputProps.endAdornment}
-                      </React.Fragment>
-                    ),
-                  }}/>
-                  
+                  <TextField
+                    {...params}
+                    label="Select Medicine"
+                    InputProps={{
+                      ...params.InputProps,
+                      endAdornment: (
+                        <React.Fragment>
+                          {isSelectDataLoading ? (
+                            <CircularProgress color="inherit" size={20} />
+                          ) : null}
+                          {params.InputProps.endAdornment}
+                        </React.Fragment>
+                      ),
+                    }}
+                  />
                 )}
               />
               {errors["name"] && (
@@ -232,9 +240,11 @@ const PharmacyProfile = () => {
                 name="unitPrice"
                 variant="filled"
                 label="Unit Price"
-                type="number"
                 fullWidth
-                InputProps={{ inputProps: { min: 0 }, shrink: "true" }}
+                InputProps={{
+                  inputProps: { min: 0, step: "any", type: "number" },
+                  shrink: "true",
+                }}
                 value={inputs.unitPrice}
                 onChange={(e) =>
                   setInputs({
@@ -289,10 +299,8 @@ const PharmacyProfile = () => {
           </form>
         </Box>
       </Popup>
-   
-
     </React.Fragment>
   );
-}
+};
 
 export default PharmacyProfile;

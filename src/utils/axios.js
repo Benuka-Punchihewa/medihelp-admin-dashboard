@@ -4,7 +4,7 @@ import constants from "../constants";
 // import store from "../store";
 
 const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzBiOWIzZjViYzg5ZDBkYWJkZWNlZmYiLCJlbWFpbCI6ImJlbnVrYUBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJwaGFybWFjaWVzIjpbXSwiaWF0IjoxNjYyNTc4MTYxLCJleHAiOjE2NjI2NjQ1NjF9.n_gwZ8y_-VeZhp2UDTigc9Utx05J4x9PqR6YYOZKwJM";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzBiOWIzZjViYzg5ZDBkYWJkZWNlZmYiLCJlbWFpbCI6ImJlbnVrYUBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJwaGFybWFjaWVzIjpbXSwiaWF0IjoxNjYyNjYxNDY4LCJleHAiOjE2NjI3NDc4Njh9.ZjMeBPT29SdpBP8Tg4363zn8K_y-f_Le0lYptdCS7wo";
 
 export const getApi = () => {
   //   const newState = store.getState();
