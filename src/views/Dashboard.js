@@ -5,11 +5,12 @@ import ReportButton from "../components/common/ReportButton";
 import { Grid } from "@mui/material";
 
 const Dashboard = () => {
+  const handleSearch = (input) => {};
   return (
     <React.Fragment>
       <Grid container spacing={2}>
         <Grid item xs={10}>
-          <SearchBar />
+          <SearchBar onSearch={handleSearch} />
         </Grid>
         <Grid item xs={1}>
           <AddButton />
