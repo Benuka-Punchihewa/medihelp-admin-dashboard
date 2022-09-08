@@ -14,13 +14,14 @@ export const createGlobalMedicine = async (data) => {
   return response;
 };
 
-export const getGlobalMedicines = async (page, limit, orderBy) => {
+export const getGlobalMedicines = async (page, limit, orderBy, keyword) => {
   const response = await getApi()
     .get("/global-medicines", {
       params: {
         page,
         limit,
         orderBy,
+        keyword
       },
     })
     .then((res) => {

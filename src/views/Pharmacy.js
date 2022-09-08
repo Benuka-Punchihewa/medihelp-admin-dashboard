@@ -17,6 +17,7 @@ import {createPharmacy , getallPharmacies} from "../service/addPharmacy.service"
 import { popAlert } from "../utils/alerts";
 import colors from "../assets/styles/colors";
 import TableAction from "../components/common/TableActions";
+import { useNavigate } from "react-router-dom";
 
 
 //table columns
@@ -50,6 +51,7 @@ const tableColumns = [
 ];
 
 const Pharmacy = () => {
+  const navigate = useNavigate();
   const [inputs, setInputs] = useState(addPharmacy);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -91,7 +93,7 @@ const Pharmacy = () => {
   };
  
   const handleView = (id) =>{
-    console.log(id);
+    navigate(`/pharmacy/${id}`);
   }
 
   const handlePageChange = (page) => {
