@@ -67,6 +67,7 @@ const PharmacyProfile = () => {
     () =>
       globalMedicines.find((medi) => medi.id === inputs.globalMedicine._id)
         ?.label || "",
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [inputs.globalMedicine._id]
   );
 

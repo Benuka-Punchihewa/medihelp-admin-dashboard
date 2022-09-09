@@ -75,7 +75,7 @@ const UnApprovedOrder = ({ order, onDataUpdate }) => {
         availability: row.availability,
       });
     }
-    console.log({ medicines: preparedArr });
+
     // api call
     const response = await approveOrder(order._id, { medicines: preparedArr });
 
