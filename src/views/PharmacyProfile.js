@@ -64,7 +64,9 @@ const PharmacyProfile = () => {
   const handlePopupClose = () => setShowPopup(false);
 
   const memoizedLabel = useMemo(
-    () => globalMedicines.find((medi) => medi.id === id)?.label || "",
+    () =>
+      globalMedicines.find((medi) => medi.id === inputs.globalMedicine._id)
+        ?.label || "",
     [inputs.globalMedicine._id]
   );
 

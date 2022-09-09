@@ -26,3 +26,16 @@ export const getOrdersByPharmacy = async (
 
   return response;
 };
+
+export const approveOrder = async (orderId, data) => {
+  const response = await getApi()
+    .patch(`/orders/${orderId}/approve`, data)
+    .then((res) => {
+      return buildResponse(true, res.data);
+    })
+    .catch((err) => {
+      return buildResponse(false, err.response.data, err.response.status);
+    });
+
+  return response;
+};

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import SearchBar from "../components/common/SearchBar";
 import AddButton from "../components/common/AddButton";
 import ReportButton from "../components/common/ReportButton";
@@ -14,6 +14,7 @@ import Popup from "../components/common/Popup";
 import ReusableTable from "../components/common/ReusableTable";
 import { getOrdersByPharmacy } from "../service/order.service";
 import TableAction from "../components/common/TableActions";
+import UnApprovedOrder from "../components/orders/UnApprovedOrder";
 
 const Pharamcies = [
   { label: "Samarasingha Pharamcy", _id: "6312055d361e1bab6496fd32" },
@@ -42,6 +43,8 @@ const tableColumns = [
 ];
 
 const Orders = () => {
+  const ordersRef = useRef([]);
+
   const [showPopup, setShowPopup] = useState(false);
   const [selectedPharmacyId, setSelectedPharmacyId] = useState(
     Pharamcies[0]?._id
@@ -55,11 +58,13 @@ const Orders = () => {
   const [totalElements, setTotalElements] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [keyword, setKeyword] = useState("");
+  const [selectedOrderId, setSelectedOrderId] = useState("");
 
   const handlePopupClose = () => setShowPopup(false);
 
   const handleView = (id) => {
-    console.log(id);
+    setSelectedOrderId(id);
+    setShowPopup(true);
   };
 
   const handlePageChange = (page) => {
@@ -73,6 +78,11 @@ const Orders = () => {
   const handleSearch = (input) => {
     setKeyword(input);
   };
+
+  const selectedOrder = useMemo(
+    () => ordersRef.current.find((order) => order._id === selectedOrderId),
+    [selectedOrderId]
+  );
 
   useEffect(() => {
     let unmounted = false;
@@ -104,6 +114,7 @@ const Orders = () => {
         if (!unmounted) {
           setTotalElements(response.data.totalElements);
           setTableRows(tableDataArr);
+          ordersRef.current = response.data.content;
         }
       } else {
         console.error(response?.data);
@@ -146,7 +157,7 @@ const Orders = () => {
           />
         </Grid>
         <Grid item xs={1}>
-          <AddButton onClick={() => setShowPopup(true)} />
+          <AddButton />
         </Grid>
         <Grid item xs={1}>
           <ReportButton />
@@ -186,12 +197,20 @@ const Orders = () => {
 
       {/* custom popup */}
       <Popup
-        title="Tile"
-        width={300}
+        title={
+          selectedOrder?.status === "pending"
+            ? `Order Approval - ${selectedOrder?._id}`
+            : selectedOrder?._id
+        }
+        width={"95vw"}
         show={showPopup}
         onClose={handlePopupClose}
       >
-        Anything can come here!
+        {selectedOrder?.status === "pending" ? (
+          <UnApprovedOrder order={selectedOrder} />
+        ) : (
+          <></>
+        )}
       </Popup>
     </React.Fragment>
   );

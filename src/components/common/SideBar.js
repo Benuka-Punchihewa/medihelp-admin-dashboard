@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import {
   Dashboard,
   Medication,
@@ -34,81 +34,100 @@ const Sidebar = () => {
         },
       }}
     >
-      <Grid item xs={8}>
-        <Stack
-          direction="row"
-          spacing={5}
-          justifyContent="center"
-          textAlign="center"
-          sx={{ height: "100px" }}
-        >
-          <Typography
-            variant="h4"
-            sx={{ fontWeight: "bold", color: colors.white, mt: 2 }}
+      <Box
+        sx={{
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
+      >
+        <Box>
+          <Stack
+            direction="row"
+            justifyContent="center"
+            textAlign="center"
+            sx={{ mt: 5, mb: 4 }}
           >
-            MediHelp
-          </Typography>
-        </Stack>
-      </Grid>
-
-      <List>
-        <ListItem disablePadding>
-          <ListItemButton component="a" href="/dashboard">
-            <ListItemIcon sx={{ display: { color: colors.white } }}>
-              <Dashboard />
-            </ListItemIcon>
-            <ListItemText primary="Dashboard" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton component="a" href="#simple-list">
-            <ListItemIcon sx={{ display: { color: colors.white } }}>
-              <Person />
-            </ListItemIcon>
-            <ListItemText primary="Users" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton component="a" href="/pharmacy">
-            <ListItemIcon sx={{ display: { color: colors.white } }}>
-              <Medication />
-            </ListItemIcon>
-            <ListItemText primary="Pharmacies" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton component="a" href="/orders">
-            <ListItemIcon sx={{ display: { color: colors.white } }}>
-              <ShoppingBag />
-            </ListItemIcon>
-            <ListItemText primary="Orders" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton component="a" href="/global-medicines">
-            <ListItemIcon sx={{ display: { color: colors.white } }}>
-              <Vaccines />
-            </ListItemIcon>
-            <ListItemText primary="Global Medicines" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton component="a" href="#simple-list">
-            <ListItemIcon sx={{ display: { color: colors.white } }}>
-              <Payment />
-            </ListItemIcon>
-            <ListItemText primary="Payments" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding sx={{mt:20}}>
-          <ListItemButton component="a" href="#simple-list">
-            <ListItemIcon sx={{ display: { color: colors.white } }}>
-              <Logout />
-            </ListItemIcon>
-            <ListItemText primary="Logout" />
-          </ListItemButton>
-        </ListItem>
-      </List>
+            <Typography
+              variant="h4"
+              sx={{ fontWeight: "bold", color: colors.white }}
+            >
+              MediHelp
+            </Typography>
+          </Stack>
+          <List>
+            <ListItem disablePadding>
+              <ListItemButton component="a" href="/dashboard">
+                <ListItemIcon sx={{ display: { color: colors.white } }}>
+                  <Dashboard />
+                </ListItemIcon>
+                <ListItemText primary="Dashboard" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton component="a" href="#simple-list">
+                <ListItemIcon sx={{ display: { color: colors.white } }}>
+                  <Person />
+                </ListItemIcon>
+                <ListItemText primary="Users" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton component="a" href="/pharmacy">
+                <ListItemIcon sx={{ display: { color: colors.white } }}>
+                  <Medication />
+                </ListItemIcon>
+                <ListItemText primary="Pharmacies" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton component="a" href="/orders">
+                <ListItemIcon sx={{ display: { color: colors.white } }}>
+                  <ShoppingBag />
+                </ListItemIcon>
+                <ListItemText primary="Orders" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton component="a" href="/global-medicines">
+                <ListItemIcon sx={{ display: { color: colors.white } }}>
+                  <Vaccines />
+                </ListItemIcon>
+                <ListItemText primary="Global Medicines" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton component="a" href="#simple-list">
+                <ListItemIcon sx={{ display: { color: colors.white } }}>
+                  <Payment />
+                </ListItemIcon>
+                <ListItemText primary="Payments" />
+              </ListItemButton>
+            </ListItem>
+            {/* <ListItem disablePadding>
+            <ListItemButton component="a" href="#simple-list">
+              <ListItemIcon sx={{ display: { color: colors.white } }}>
+                <Logout />
+              </ListItemIcon>
+              <ListItemText primary="Logout" />
+            </ListItemButton>
+          </ListItem> */}
+          </List>
+        </Box>
+        <Box sx={{ bottom: 0 }}>
+          <List>
+            <ListItem disablePadding>
+              <ListItemButton component="a" href="#simple-list">
+                <ListItemIcon sx={{ display: { color: colors.white } }}>
+                  <Logout />
+                </ListItemIcon>
+                <ListItemText primary="Logout" />
+              </ListItemButton>
+            </ListItem>
+          </List>
+        </Box>
+      </Box>
     </Box>
   );
 };

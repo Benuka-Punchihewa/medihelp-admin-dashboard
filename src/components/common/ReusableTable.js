@@ -74,15 +74,19 @@ export default function ReusableTable({
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={totalElements || 0}
-        rowsPerPage={limit || 10}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+      {totalElements &&
+        typeof onPageChange === "function" &&
+        typeof onLimitChange === "function" && (
+          <TablePagination
+            rowsPerPageOptions={[10, 25, 100]}
+            component="div"
+            count={totalElements || 0}
+            rowsPerPage={limit || 10}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        )}
     </Paper>
   );
 }
