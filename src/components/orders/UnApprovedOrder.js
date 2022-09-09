@@ -44,12 +44,12 @@ const tableColumns = [
   },
 ];
 
-const inputModel = {
+let inputModel = {
   medicine: { id: "", name: "" },
   quantity: 0,
 };
 
-const UnApprovedOrder = ({ order }) => {
+const UnApprovedOrder = ({ order, onDataUpdate }) => {
   const timeoutRef = useRef(null);
   const tRowRef = useRef([]);
 
@@ -82,7 +82,7 @@ const UnApprovedOrder = ({ order }) => {
     if (response.success) {
       response?.data?.message &&
         popAlert("Success!", response?.data?.message, "success").then((res) => {
-          // update parent
+          onDataUpdate();
         });
     } else {
       response?.data?.message &&
@@ -168,7 +168,8 @@ const UnApprovedOrder = ({ order }) => {
     () =>
       globalMedicines.find((medi) => medi.id === inputs.medicine.id)?.label ||
       "",
-    [inputs.medicine.id, globalMedicines]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [inputs.medicine.id]
   );
 
   const throttle = (func, time) => {

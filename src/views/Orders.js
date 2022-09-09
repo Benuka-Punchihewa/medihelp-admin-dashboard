@@ -59,6 +59,7 @@ const Orders = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [keyword, setKeyword] = useState("");
   const [selectedOrderId, setSelectedOrderId] = useState("");
+  const [refresh, setRefresh] = useState(false);
 
   const handlePopupClose = () => setShowPopup(false);
 
@@ -77,6 +78,10 @@ const Orders = () => {
 
   const handleSearch = (input) => {
     setKeyword(input);
+  };
+
+  const handleDataUpdate = () => {
+    setRefresh(!refresh);
   };
 
   const selectedOrder = useMemo(
@@ -127,7 +132,7 @@ const Orders = () => {
     return () => {
       unmounted = true;
     };
-  }, [pagination, selectedPharmacyId, keyword]);
+  }, [pagination, selectedPharmacyId, keyword, refresh]);
 
   return (
     <React.Fragment>
@@ -207,7 +212,10 @@ const Orders = () => {
         onClose={handlePopupClose}
       >
         {selectedOrder?.status === "pending" ? (
-          <UnApprovedOrder order={selectedOrder} />
+          <UnApprovedOrder
+            order={selectedOrder}
+            onDataUpdate={handleDataUpdate}
+          />
         ) : (
           <></>
         )}
