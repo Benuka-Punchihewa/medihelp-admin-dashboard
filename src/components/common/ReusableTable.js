@@ -13,20 +13,16 @@ export default function ReusableTable({
   rows,
   columns,
   totalElements,
+  limit,
+  page,
   onPageChange,
   onLimitChange,
 }) {
-  const [page, setPage] = useState(0);
-  const [limit, setLimit] = useState(10);
-
   const handleChangePage = (event, newPage) => {
-    setPage(newPage);
     onPageChange(newPage + 1);
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setLimit(+event.target.value);
-    setPage(0);
     onPageChange(1);
     onLimitChange(+event.target.value);
   };
@@ -82,7 +78,7 @@ export default function ReusableTable({
             component="div"
             count={totalElements || 0}
             rowsPerPage={limit || 10}
-            page={page}
+            page={page - 1 || 0}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />

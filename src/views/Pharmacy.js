@@ -27,26 +27,22 @@ const tableColumns = [
   {
     id: "registrationNumber",
     label: "Reg Number",
-    minWidth: 170,
+    minWidth: 140,
     align: "left",
   },
-
   {
     id: "name",
     label: "Name",
-    minWidth: 170,
     align: "right",
   },
   {
     id: "contactNumber",
     label: "Contact Number",
-    minWidth: 170,
     align: "right",
   },
   {
     id: "action",
     label: "Action",
-    minWidth: 170,
     align: "right",
   },
 ];
@@ -196,6 +192,8 @@ const Pharmacy = () => {
             rows={tableRows}
             columns={tableColumns}
             totalElements={totalElements}
+            limit={pagination.limit}
+            page={pagination.page}
             onPageChange={handlePageChange}
             onLimitChange={handleLimitChange}
           />

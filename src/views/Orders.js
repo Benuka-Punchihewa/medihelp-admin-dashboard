@@ -25,20 +25,18 @@ const tableColumns = [
   {
     id: "orderId",
     label: "Order ID",
-    minWidth: 170,
+    minWidth: 140,
     format: (value) => `#${value}`,
   },
   { id: "patient", label: "Patient Name", align: "right", minWidth: 100 },
   {
     id: "status",
     label: "Order Status",
-    minWidth: 170,
     align: "right",
   },
   {
     id: "action",
     label: "Action",
-    minWidth: 170,
     align: "right",
   },
 ];
@@ -196,6 +194,8 @@ const Orders = () => {
             rows={tableRows}
             columns={tableColumns}
             totalElements={totalElements}
+            limit={pagination.limit}
+            page={pagination.page}
             onPageChange={handlePageChange}
             onLimitChange={handleLimitChange}
           />

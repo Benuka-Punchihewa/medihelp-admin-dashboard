@@ -25,32 +25,29 @@ const tableColumns = [
   {
     id: "name",
     label: "Name",
-    minWidth: 170,
+    minWidth: 140,
     align: "left",
   },
   {
     id: "strength",
     label: "Strength",
-    minWidth: 170,
     align: "right",
   },
   {
     id: "stockLevel",
     label: "Stock Level",
-    minWidth: 170,
     align: "right",
   },
 
   {
     id: "unitPrice",
     label: "Unit Price",
-    minWidth: 170,
     align: "right",
   },
   {
     id: "action",
     label: "Action",
-    minWidth: 170,
+
     align: "right",
   },
 ];
@@ -320,6 +317,8 @@ const PharmacyProfile = () => {
             rows={tableRows}
             columns={tableColumns}
             totalElements={totalElements}
+            limit={pagination.limit}
+            page={pagination.page}
             onPageChange={handlePageChange}
             onLimitChange={handleLimitChange}
           />
