@@ -224,7 +224,7 @@ const PharmacyProfile = () => {
     return () => {
       unmounted = true;
     };
-  }, [pagination, refresh]);
+  }, [pagination, refresh, id]);
 
   return (
     <React.Fragment>
