@@ -15,6 +15,7 @@ import ReusableTable from "../components/common/ReusableTable";
 import { getOrdersByPharmacy } from "../service/order.service";
 import TableAction from "../components/common/TableActions";
 import UnApprovedOrder from "../components/orders/UnApprovedOrder";
+import ApprovedOrder from "../components/orders/ApprovedOrders";
 
 const Pharamcies = [
   { label: "Samarasingha Pharamcy", _id: "6312055d361e1bab6496fd32" },
@@ -82,6 +83,7 @@ const Orders = () => {
 
   const handleDataUpdate = () => {
     setRefresh(!refresh);
+    setShowPopup(false);
   };
 
   const selectedOrder = useMemo(
@@ -217,7 +219,7 @@ const Orders = () => {
             onDataUpdate={handleDataUpdate}
           />
         ) : (
-          <></>
+          <ApprovedOrder order={selectedOrder} />
         )}
       </Popup>
     </React.Fragment>

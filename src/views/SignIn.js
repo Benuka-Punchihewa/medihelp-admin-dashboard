@@ -12,11 +12,9 @@ import { createUser } from "../service/signIn.service";
 import { popAlert } from "../utils/alerts";
 import { useDispatch } from "react-redux";
 import { authActions } from "../store/authSlice";
-import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const [inputs, setInputs] = useState(signup);
   const [errors, setErrors] = useState({});
@@ -33,7 +31,7 @@ const SignIn = () => {
       dispatch(authActions.login(response.data));
       response?.data?.message &&
         popAlert("Success!", response?.data?.message, "success").then((res) => {
-          navigate("/");
+          window.location.replace("/");
         });
     } else {
       response?.data?.message &&
