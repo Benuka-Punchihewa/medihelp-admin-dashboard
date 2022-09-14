@@ -12,14 +12,45 @@ import {
 import colors from "../assets/styles/colors";
 import SearchBar from "../components/common/SearchBar";
 import AddButton from "../components/common/AddButton";
-//import ReusableTable from "../components/common/ReusableTable";
-//import TableAction from "../components/common/TableActions";
+import ReusableTable from "../components/common/ReusableTable";
+import TableAction from "../components/common/TableActions";
 import { useParams } from "react-router-dom";
 import { getGlobalMedicines } from "../service/globalMedicines.service";
-import { createMedicine } from "../service/medicine.service";
+import { createMedicine, getAllMedicines } from "../service/medicine.service";
 import { popAlert } from "../utils/alerts";
 import medicine from "../models/medicine";
 import Popup from "../components/common/Popup";
+
+const tableColumns = [
+  {
+    id: "name",
+    label: "Name",
+    minWidth: 140,
+    align: "left",
+  },
+  {
+    id: "strength",
+    label: "Strength",
+    align: "right",
+  },
+  {
+    id: "stockLevel",
+    label: "Stock Level",
+    align: "right",
+  },
+
+  {
+    id: "unitPrice",
+    label: "Unit Price",
+    align: "right",
+  },
+  {
+    id: "action",
+    label: "Action",
+
+    align: "right",
+  },
+];
 
 const PharmacyProfile = () => {
   const { id } = useParams();
@@ -36,6 +67,13 @@ const PharmacyProfile = () => {
   const [globalMedicines, setGlobalMedicines] = useState([]);
   const [open, setOpen] = useState(false);
   const [keyword, setKeyword] = useState("");
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 10,
+    orderBy: "desc",
+  });
+  const [tableRows, setTableRows] = useState([]);
+  const [totalElements, setTotalElements] = useState(0);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -62,6 +100,22 @@ const PharmacyProfile = () => {
   };
 
   const handlePopupClose = () => setShowPopup(false);
+
+  const handlePageChange = (page) => {
+    setPagination({ ...pagination, page: page });
+  };
+
+  const handleLimitChange = (limit) => {
+    setPagination({ ...pagination, limit: limit });
+  };
+
+  const handleEdit = (id) => {
+    console.log(id);
+  };
+
+  const handleDelete = (id) => {
+    console.log(id);
+  };
 
   const memoizedLabel = useMemo(
     () =>
@@ -122,6 +176,56 @@ const PharmacyProfile = () => {
     };
   }, [open]);
 
+  useEffect(() => {
+    let unmounted = false;
+
+    if (!unmounted) setIsLoading(true);
+
+    const fetchAndSet = async () => {
+      const response = await getAllMedicines(
+        id,
+        pagination.page,
+        pagination.limit,
+        pagination.orderBy
+      );
+
+      if (response.success) {
+        if (!response.data) return;
+
+        let tableDataArr = [];
+        for (const medicine of response.data.content) {
+          tableDataArr.push({
+            name: medicine.global.doc.name,
+            strength: medicine.global.doc.strength,
+            stockLevel: medicine.stockLevel,
+            unitPrice: medicine.unitPrice,
+            action: (
+              <TableAction
+                id={medicine._id}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            ),
+          });
+        }
+
+        if (!unmounted) {
+          setTotalElements(response.data.totalElements);
+          setTableRows(tableDataArr);
+        }
+      } else {
+        console.error(response?.data);
+      }
+      if (!unmounted) setIsLoading(false);
+    };
+
+    fetchAndSet();
+
+    return () => {
+      unmounted = true;
+    };
+  }, [pagination, refresh]);
+
   return (
     <React.Fragment>
       <Typography variant="h4" fontWeight="bold" sx={{ mb: 2 }}>
@@ -151,20 +255,22 @@ const PharmacyProfile = () => {
           <Grid container sx={{ ml: 5 }}>
             <Grid item xs={12} md={6}>
               <Box sx={{ marginBottom: "5px", fontWeight: "bold" }}>
-                <Typography variant="p">Samarashingha Pharamacy</Typography>
+                <Typography variant="p">Osil Pharmacy</Typography>
               </Box>
 
               <Box>
-                <Typography variant="p">RG-GMP-001</Typography>
+                <Typography variant="p">GMP-MIR-008</Typography>
               </Box>
             </Grid>
             <Grid item xs={12} md={6}>
               <Box sx={{ marginBottom: "5px" }}>
-                <Typography variant="p">42/1A, Apple Rd., Pineapple</Typography>
+                <Typography variant="p">
+                  42/1A, Colombo Rd., Kadawatha
+                </Typography>
               </Box>
 
               <Box>
-                <Typography variant="p">0712704856</Typography>
+                <Typography variant="p">0332239745</Typography>
               </Box>
             </Grid>
           </Grid>
@@ -185,6 +291,40 @@ const PharmacyProfile = () => {
         </Grid>
       </Grid>
 
+      {isLoading ? (
+        <Box
+          sx={{
+            width: "100%",
+            mt: "3%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <CircularProgress sx={{ mr: 2 }} />
+          Loading...
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            width: "100%",
+            backgroundColor: "#fff",
+            boxShadow: "0px 8px 25px rgba(0, 0, 0, 0.25)",
+            mt: "3%",
+          }}
+        >
+          <ReusableTable
+            rows={tableRows}
+            columns={tableColumns}
+            totalElements={totalElements}
+            limit={pagination.limit}
+            page={pagination.page}
+            onPageChange={handlePageChange}
+            onLimitChange={handleLimitChange}
+          />
+        </Box>
+      )}
+
       {/* custom popup */}
       <Popup
         title="Add Medicine"
@@ -192,7 +332,7 @@ const PharmacyProfile = () => {
         show={showPopup}
         onClose={handlePopupClose}
       >
-        <Box sx={{ mb: 2 }}>
+        <Box sx={{ mb: 2, mt: 1 }}>
           <form onSubmit={handleSubmit}>
             <Box sx={{ mb: 2 }}>
               <Autocomplete

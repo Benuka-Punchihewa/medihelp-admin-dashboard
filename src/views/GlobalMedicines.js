@@ -28,26 +28,22 @@ const tableColumns = [
   {
     id: "name",
     label: "Name",
-    minWidth: 170,
+    minWidth: 140,
     align: "left",
   },
-
   {
     id: "brand",
     label: "Brand",
-    minWidth: 170,
     align: "right",
   },
   {
     id: "strength",
-    label: "Strength",
-    minWidth: 170,
+    label: "Strength (mg)",
     align: "right",
   },
   {
     id: "action",
     label: "Action",
-    minWidth: 170,
     align: "right",
   },
 ];
@@ -89,10 +85,6 @@ const GlobalMedicens = () => {
 
   const handleClear = () => {
     setInputs(globalMedicine);
-  };
-
-  const handleView = (id) => {
-    console.log(id);
   };
 
   const handleEdit = (id) => {
@@ -139,7 +131,6 @@ const GlobalMedicens = () => {
             action: (
               <TableAction
                 id={globalMedicine._id}
-                onView={handleView}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
               />
@@ -210,6 +201,8 @@ const GlobalMedicens = () => {
             rows={tableRows}
             columns={tableColumns}
             totalElements={totalElements}
+            limit={pagination.limit}
+            page={pagination.page}
             onPageChange={handlePageChange}
             onLimitChange={handleLimitChange}
           />
