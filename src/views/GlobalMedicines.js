@@ -40,7 +40,7 @@ const tableColumns = [
   },
   {
     id: "strength",
-    label: "Strength",
+    label: "Strength (mg)",
     minWidth: 170,
     align: "right",
   },
@@ -91,9 +91,6 @@ const GlobalMedicens = () => {
     setInputs(globalMedicine);
   };
 
-  const handleView = (id) => {
-    console.log(id);
-  };
 
   const handleEdit = (id) => {
     console.log(id);
@@ -139,7 +136,6 @@ const GlobalMedicens = () => {
             action: (
               <TableAction
                 id={globalMedicine._id}
-                onView={handleView}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
               />
