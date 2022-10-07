@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { GoogleMap,Marker,useLoadScript } from '@react-google-maps/api'
 import '../assets/styles/components/mapGoogal.css'
 
-const MapGoogal =({inputs,setInputs}) => {
+const MapGoogal =({inputs,OnLocationChange}) => {
 
      //define default coords
      const [coords, setCoords] = useState({ lat:parseFloat(6.927079) , lng: parseFloat(79.861244) });
@@ -39,7 +39,7 @@ const MapGoogal =({inputs,setInputs}) => {
                 onZoomChanged={handleZoomChanged}
                 onClick={(e)=>{
                     setMapMarker({ lat: e.latLng.lat(), lng: e.latLng.lng() })
-                    setInputs({
+                    OnLocationChange({
                         ...inputs,
                         location: {
                             "latitude": e.latLng.lat(),

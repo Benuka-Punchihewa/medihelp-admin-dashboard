@@ -93,6 +93,10 @@ const Pharmacy = () => {
     setLoading(false);
   };
 
+  const handleMapInput = (input) =>{
+    setInputs(input);
+  };
+
   const handleClear = () => {
     setInputs(addPharmacy);
   };
@@ -318,7 +322,7 @@ const Pharmacy = () => {
             <Box sx={{ mb: 1 }}>
               <Typography>Select Location</Typography>
                   <Paper elevation={0} sx={{height:200 }} >
-                    <MapGoogal input={inputs} setInputs={setInputs}/>
+                    <MapGoogal inputs={inputs} OnLocationChange={handleMapInput}/>
                   </Paper>
                        
 
