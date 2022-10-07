@@ -130,7 +130,8 @@ const PharmacyProfile = () => {
     timeoutRef.current = setTimeout(func, time);
   };
 
-  //select medicine
+  
+  //select pharmacies
   useEffect(() => {
     let unmounted = false;
 

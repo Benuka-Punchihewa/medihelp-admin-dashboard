@@ -6,8 +6,8 @@ const addPharmacy =
     "contactNumber": "",
     "email": "",
     "location":{
-        "latitude": 7.075810918596508,
-        "longitude": 80.01569426053129
+        "latitude": "",
+        "longitude": ""
     }
 }
 export default addPharmacy;

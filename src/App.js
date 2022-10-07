@@ -13,6 +13,7 @@ import GlobalMedicines from "./views/GlobalMedicines";
 import Orders from "./views/Orders";
 import PharmacyProfile from "./views/PharmacyProfile";
 import SignIn from "./views/SignIn";
+// import MapGoogal from "./views/MapGoogal";
 
 const App = () => {
   if (!window.location.href.includes("auth")) {
@@ -38,6 +39,7 @@ const App = () => {
                     />
                     <Route path="/pharmacy/:id" element={<PharmacyProfile />} />
                     <Route path="/orders" element={<Orders />} />
+                    {/* <Route path="gap-googal" element={<MapGoogal />}/> */}
                   </Routes>
                 </BrowserRouter>
               </Grid>

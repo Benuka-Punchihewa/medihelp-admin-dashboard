@@ -14,13 +14,14 @@ export const createPharmacy = async (data) => {
   return response;
 };
 
-export const getallPharmacies = async (page, limit, orderBy) => {
+export const getallPharmacies = async (page, limit, orderBy,keyword) => {
   const response = await getApi()
     .get("/pharmacies", {
       params: {
         page,
         limit,
         orderBy,
+        keyword,
       },
     })
     .then((res) => {
