@@ -13,6 +13,7 @@ import GlobalMedicines from "./views/GlobalMedicines";
 import Orders from "./views/Orders";
 import PharmacyProfile from "./views/PharmacyProfile";
 import SignIn from "./views/SignIn";
+import SignUp from "./views/SignUp";
 
 const App = () => {
   if (!window.location.href.includes("auth")) {
@@ -50,6 +51,7 @@ const App = () => {
     return (
       <BrowserRouter>
         <Routes>
+          <Route path="/auth/sign-up" element={<SignUp />} />
           <Route path="/auth/sign-in" element={<SignIn />} />
         </Routes>
       </BrowserRouter>
