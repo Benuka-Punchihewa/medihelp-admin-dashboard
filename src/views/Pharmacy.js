@@ -104,13 +104,14 @@ const Pharmacy = () => {
   const handlePageChange = (page) => {
     setPagination({ ...pagination, page: page });
   };
+
   const handleLimitChange = (limit) => {
     setPagination({ ...pagination, limit: limit });
   };
 
   const handlePopupClose = () => setShowPopup(false);
 
-   const handleSearch = (input) => {
+  const handleSearch = (input) => {
     setKeyword(input);
   };
 

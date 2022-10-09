@@ -20,6 +20,15 @@ import { createMedicine, getAllMedicines } from "../service/medicine.service";
 import { popAlert } from "../utils/alerts";
 import medicine from "../models/medicine";
 import Popup from "../components/common/Popup";
+import DeleteButton from "../components/common/DeleteButton";
+import EditButton from "../components/common/EditButton";
+import Paper from '@mui/material/Paper';
+import MapGoogal from "./MapGoogal";
+// import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import { red } from "@mui/material/colors";
+
+
 
 const tableColumns = [
   {
@@ -60,8 +69,11 @@ const PharmacyProfile = () => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isSelectDataLoading, setIsSelectDataLoading] = useState(false);
-  const [showPopup, setShowPopup] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [editShowPopup, seteditShowPopup] = useState(false);
+  const [deleteShowPopup, setDeleteShowPopup] = useState(false);
+  
 
   // select medicine
   const [globalMedicines, setGlobalMedicines] = useState([]);
@@ -86,6 +98,8 @@ const PharmacyProfile = () => {
       response?.data?.message &&
         popAlert("Success!", response?.data?.message, "success").then((res) => {
           setShowPopup(false);
+          seteditShowPopup(false);
+          setDeleteShowPopup(false);
         });
     } else {
       response?.data?.message &&
@@ -95,11 +109,22 @@ const PharmacyProfile = () => {
     setIsLoading(false);
   };
 
+
   const handleClear = () => {
     setInputs(medicine);
   };
 
+  const handleCancel = () => {
+    
+  };
+
+  const handleMapInput = (input) =>{
+    setInputs(input);
+  };
+
   const handlePopupClose = () => setShowPopup(false);
+  const edithandlePopupClose = () => seteditShowPopup(false);
+  const deletehandlePopupClose = () => setDeleteShowPopup(false);
 
   const handlePageChange = (page) => {
     setPagination({ ...pagination, page: page });
@@ -263,7 +288,7 @@ const PharmacyProfile = () => {
                 <Typography variant="p">GMP-MIR-008</Typography>
               </Box>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={4}>
               <Box sx={{ marginBottom: "5px" }}>
                 <Typography variant="p">
                   42/1A, Colombo Rd., Kadawatha
@@ -274,10 +299,23 @@ const PharmacyProfile = () => {
                 <Typography variant="p">0332239745</Typography>
               </Box>
             </Grid>
+            
           </Grid>
+          <Grid item xs={12} md={2}>
+              <Box sx={{ marginBottom: "5px" }}>
+                <EditButton onClick={() => seteditShowPopup(true)}/>
+              </Box>
+            </Grid>
+
+            <Grid item xs={12} md={2}>
+              <Box sx={{ marginBottom: "5px" }}>
+                <DeleteButton onClick={() => setDeleteShowPopup(true)}/>
+              </Box>
+            </Grid>
         </Stack>
       </Box>
-
+      
+      
       <Typography variant="h5" fontWeight="bold" sx={{ mb: 2, mt: 4 }}>
         Medicines
       </Typography>
@@ -302,7 +340,7 @@ const PharmacyProfile = () => {
             justifyContent: "center",
           }}
         >
-          <CircularProgress sx={{ mr: 2 }} />
+        <CircularProgress sx={{ mr: 2 }} />
           Loading...
         </Box>
       ) : (
@@ -453,6 +491,201 @@ const PharmacyProfile = () => {
             </Box>
           </form>
         </Box>
+      </Popup>
+
+      {/* custom popup */}
+      <Popup
+        title="Edit Pharmacy"
+        width={800}
+        show={editShowPopup}
+        onClose={edithandlePopupClose}
+      >
+        <Box sx={{ mb: 1 }}>
+          <form onSubmit={handleSubmit}>
+            <Box sx={{ mb: 1 }}>
+              <TextField
+                name="name"
+                variant="filled"
+                label="Enter Name"
+                fullWidth
+                value={inputs.name}
+                onChange={(e) =>
+                  setInputs({
+                    ...inputs,
+                    name: e.target.value,
+                  })
+                }
+              />
+              {errors["name"] && (
+                <Typography color="error">{errors["name"]}</Typography>
+              )}
+            </Box>
+            <Box sx={{ mb: 1 }}>
+              <TextField
+                name="registrationNumber"
+                variant="filled"
+                label="Enter Registration Number"
+                fullWidth
+                value={inputs.registrationNumber}
+                onChange={(e) =>
+                  setInputs({
+                    ...inputs,
+                    registrationNumber: e.target.value,
+                  })
+                }
+              />
+              {errors["registrationNumber"] && (
+                <Typography color="error">
+                  {errors["registrationNumber"]}
+                </Typography>
+              )}
+            </Box>
+            <Box sx={{ mb: 1 }}>
+              <TextField
+                name="address"
+                variant="filled"
+                label="Enter Address"
+                fullWidth
+                value={inputs.address}
+                onChange={(e) =>
+                  setInputs({
+                    ...inputs,
+                    address: e.target.value,
+                  })
+                }
+              />
+              {errors["address"] && (
+                <Typography color="error">{errors["address"]}</Typography>
+              )}
+            </Box>
+
+            <Box sx={{ mb: 1 }}>
+              <TextField
+                name="contactNumber"
+                variant="filled"
+                label="Enter Contact Number"
+                fullWidth
+                value={inputs.contactNumber}
+                onChange={(e) =>
+                  setInputs({
+                    ...inputs,
+                    contactNumber: e.target.value,
+                  })
+                }
+              />
+              {errors["contactNumber"] && (
+                <Typography color="error">{errors["contactNumber"]}</Typography>
+              )}
+            </Box>
+            <Box sx={{ mb: 1 }}>
+              <TextField
+                name="email"
+                variant="filled"
+                label="Enter Email"
+                fullWidth
+                value={inputs.email}
+                onChange={(e) =>
+                  setInputs({
+                    ...inputs,
+                    email: e.target.value,
+                  })
+                }
+              />
+              {errors["email"] && (
+                <Typography color="error">{errors["email"]}</Typography>
+              )}
+            </Box>
+
+            <Box sx={{ mb: 1 }}>
+              <Typography>Select Location</Typography>
+                  <Paper elevation={0} sx={{height:200 }} >
+                    <MapGoogal inputs={inputs} OnLocationChange={handleMapInput}/>
+                  </Paper>
+                       
+
+                  {errors["location"] && (
+                    <Typography color="error">{errors["location"]}</Typography>
+                  )}
+            </Box>
+
+            <Box sx={{ mb: 2, display: "flex", justifyContent: "flex-end" }}>
+              <Button
+                type="reset"
+                variant="contained"
+                onClick={handleClear}
+                sx={{ py: 2, px: 5, mr: 2, backgroundColor: colors.grey }}
+              >
+                Clear
+              </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{ py: 2, px: 5 }}
+                disabled={isLoading}
+              >
+                {isLoading ? <CircularProgress color="secondary" /> : "Save"}
+              </Button>
+            </Box>
+          </form>
+        </Box>
+      </Popup>
+
+      {/* custom popup */}
+      <Popup
+        width={600}
+        show={deleteShowPopup}
+        onClose={deletehandlePopupClose}
+      >
+        <Box sx={{textAlign:'center'}}>
+          <DeleteOutlineOutlinedIcon sx={{ color:red[500],fontSize: 60  }}/>
+        </Box>
+
+        <Typography component="div" gutterBottom>
+            <Box sx={{  fontSize: 'h5.fontSize',
+                        fontWeight: 'bold',
+                        color:colors.black,
+                        textAlign:'center',mt:3 }}>
+                    Are You sure you want to delete this pharmacy
+            </Box>
+        </Typography> 
+  
+        <Typography component="div" variant="caption" gutterBottom>
+            <Box sx={{  fontWeight: 'bold',
+                        color:colors.red,
+                        textAlign:'center',mt:3 }}>
+                    Warning! This pharmay cannot be recorved again
+            </Box>
+        </Typography>
+      
+        <Grid container sx={{mt:5}}>
+        <Grid item xs={6}>
+          <Box sx={{  display: "flex", justifyContent: "flex-end",mr:8}}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{ py: 2, px: 5 }}
+                  disabled={isLoading}
+                  color="error"
+                >
+                  {isLoading ? <CircularProgress/> : "Delete"}
+                </Button>
+          </Box> 
+        </Grid>
+        <Grid item xs={6}>
+        <Box sx={{  display: "flex", justifyContent:"flex-start",ml:8}}>
+                  <Button
+                    type="reset"
+                    variant="contained"
+                    onClick={handleCancel}
+                    sx={{ py: 2, px: 5, mr: 2, backgroundColor: colors.grey }}
+                  >
+                    Cancel
+                  </Button>
+            </Box>
+            
+        </Grid>
+      </Grid>
+      
       </Popup>
     </React.Fragment>
   );
