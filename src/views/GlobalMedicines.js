@@ -62,6 +62,7 @@ const GlobalMedicens = () => {
   const [totalElements, setTotalElements] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [keyword, setKeyword] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -103,7 +104,9 @@ const GlobalMedicens = () => {
     setPagination({ ...pagination, limit: limit });
   };
 
-  const handleSearch = (input) => {};
+  const handleSearch = (input) => {
+    setKeyword(input);
+  };
 
   const handlePopupClose = () => setShowPopup(false);
 
@@ -116,7 +119,8 @@ const GlobalMedicens = () => {
       const response = await getGlobalMedicines(
         pagination.page,
         pagination.limit,
-        pagination.orderBy
+        pagination.orderBy,
+        keyword
       );
 
       if (response.success) {
@@ -153,7 +157,7 @@ const GlobalMedicens = () => {
     return () => {
       unmounted = true;
     };
-  }, [pagination, refresh]);
+  }, [pagination, refresh, keyword]);
 
   return (
     <React.Fragment>
