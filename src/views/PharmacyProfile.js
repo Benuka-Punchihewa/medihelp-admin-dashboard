@@ -66,12 +66,12 @@ const PharmacyProfile = () => {
   // select medicine
   const [globalMedicines, setGlobalMedicines] = useState([]);
   const [open, setOpen] = useState(false);
-  const [keyword, setKeyword] = useState("");
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 10,
     orderBy: "desc",
   });
+  const [keyword, setKeyword] = useState("");
   const [tableRows, setTableRows] = useState([]);
   const [totalElements, setTotalElements] = useState(0);
 
@@ -115,6 +115,10 @@ const PharmacyProfile = () => {
 
   const handleDelete = (id) => {
     console.log(id);
+  };
+
+  const handleSearch = (input) => {
+    setKeyword(input);
   };
 
   const memoizedLabel = useMemo(
@@ -186,7 +190,8 @@ const PharmacyProfile = () => {
         id,
         pagination.page,
         pagination.limit,
-        pagination.orderBy
+        pagination.orderBy,
+        keyword
       );
 
       if (response.success) {
@@ -224,7 +229,7 @@ const PharmacyProfile = () => {
     return () => {
       unmounted = true;
     };
-  }, [pagination, refresh, id]);
+  }, [pagination, refresh, keyword, id]);
 
   return (
     <React.Fragment>
@@ -283,7 +288,10 @@ const PharmacyProfile = () => {
 
       <Grid container spacing={2}>
         <Grid item xs={11}>
-          <SearchBar />
+          <SearchBar
+            onSearch={handleSearch}
+            placeholderText="Search Medicines..."
+          />
         </Grid>
 
         <Grid item xs={1}>

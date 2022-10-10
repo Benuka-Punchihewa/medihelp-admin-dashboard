@@ -6,7 +6,7 @@ const signUp = {
   mobile: "",
   email: "",
   birthday: "",
-  role: "admin",
+  role: "pharmacy owner",
   password: "",
 };
 

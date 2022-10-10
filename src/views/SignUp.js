@@ -90,7 +90,6 @@ const SignUp = () => {
             <form onSubmit={handleRegisterSubmit}>
               <Box sx={{ mb: 2, m: 3 }}>
                 <TextField
-                  id="outlined-basic"
                   variant="filled"
                   label="First Name"
                   fullWidth
@@ -109,7 +108,6 @@ const SignUp = () => {
 
               <Box sx={{ mb: 2, m: 3 }}>
                 <TextField
-                  id="outlined-basic"
                   variant="filled"
                   label="Last Name"
                   fullWidth
@@ -128,7 +126,6 @@ const SignUp = () => {
 
               <Box sx={{ mb: 2, m: 3 }}>
                 <TextField
-                  id="outlined-basic"
                   variant="filled"
                   label="NIC"
                   fullWidth
@@ -147,7 +144,6 @@ const SignUp = () => {
 
               <Box sx={{ mb: 2, m: 3 }}>
                 <TextField
-                  id="outlined-basic"
                   variant="filled"
                   label="Address"
                   fullWidth
@@ -166,7 +162,6 @@ const SignUp = () => {
 
               <Box sx={{ mb: 2, m: 3 }}>
                 <TextField
-                  id="outlined-basic"
                   variant="filled"
                   label="Mobile"
                   fullWidth
@@ -185,7 +180,6 @@ const SignUp = () => {
 
               <Box sx={{ mb: 2, m: 3 }}>
                 <TextField
-                  id="outlined-basic"
                   variant="filled"
                   label="E-mail"
                   type="email"
@@ -230,7 +224,6 @@ const SignUp = () => {
 
               <Box sx={{ mb: 2, m: 3 }}>
                 <TextField
-                  id="outlined-password-input"
                   variant="filled"
                   label="Password"
                   type="password"
@@ -250,7 +243,6 @@ const SignUp = () => {
 
               <Box sx={{ mb: 2, m: 3 }}>
                 <TextField
-                  id="outlined-password-input"
                   variant="filled"
                   label="Confirm Password"
                   type="password"
