@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import SearchBar from "../components/common/SearchBar";
 import AddButton from "../components/common/AddButton";
 import ReportButton from "../components/common/ReportButton";
@@ -42,8 +42,6 @@ const tableColumns = [
 ];
 
 const Orders = () => {
-  const ordersRef = useRef([]);
-
   const [showPopup, setShowPopup] = useState(false);
   const [selectedPharmacyId, setSelectedPharmacyId] = useState(
     Pharamcies[0]?._id
@@ -59,6 +57,7 @@ const Orders = () => {
   const [keyword, setKeyword] = useState("");
   const [selectedOrderId, setSelectedOrderId] = useState("");
   const [refresh, setRefresh] = useState(false);
+  const [orders, setOrders] = useState([]);
 
   const handlePopupClose = () => setShowPopup(false);
 
@@ -85,8 +84,8 @@ const Orders = () => {
   };
 
   const selectedOrder = useMemo(
-    () => ordersRef.current.find((order) => order._id === selectedOrderId),
-    [selectedOrderId]
+    () => orders.find((order) => order._id === selectedOrderId),
+    [selectedOrderId, orders]
   );
 
   useEffect(() => {
@@ -119,7 +118,7 @@ const Orders = () => {
         if (!unmounted) {
           setTotalElements(response.data.totalElements);
           setTableRows(tableDataArr);
-          ordersRef.current = response.data.content;
+          setOrders(response.data.content);
         }
       } else {
         console.error(response?.data);
@@ -219,7 +218,10 @@ const Orders = () => {
             onDataUpdate={handleDataUpdate}
           />
         ) : (
-          <ApprovedOrder order={selectedOrder} />
+          <ApprovedOrder
+            order={selectedOrder}
+            onDataUpdate={handleDataUpdate}
+          />
         )}
       </Popup>
     </React.Fragment>

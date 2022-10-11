@@ -36,7 +36,7 @@ const Popup = ({ title, width, show, onClose, children }) => {
               >
                 <Grid container>
                   <Grid item xs={10}>
-                    <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+                    <Typography variant="h5" sx={{ fontWeight: "bold" }}>
                       {" "}
                       {title}
                     </Typography>

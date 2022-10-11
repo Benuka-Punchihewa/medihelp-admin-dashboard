@@ -39,3 +39,16 @@ export const approveOrder = async (orderId, data) => {
 
   return response;
 };
+
+export const completeOrder = async (orderId, data) => {
+  const response = await getApi()
+    .patch(`/orders/${orderId}/complete`, data)
+    .then((res) => {
+      return buildResponse(true, res.data);
+    })
+    .catch((err) => {
+      return buildResponse(false, err.response.data, err.response.status);
+    });
+
+  return response;
+};
