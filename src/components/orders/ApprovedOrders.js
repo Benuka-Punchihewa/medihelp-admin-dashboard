@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, CircularProgress, Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import ReusableTable from "../common/ReusableTable";
-import { completeOrder } from "../../service/order.service";
+import { completeOrder, rejectOrder } from "../../service/order.service";
 import { popAlert } from "../../utils/alerts";
 
 const tableColumns = [
@@ -43,6 +43,21 @@ const ApprovedOrder = ({ order, onDataUpdate }) => {
     setIsSaving(false);
 
     if (response.success) {
+      popAlert("Success!", response?.data?.message, "success");
+      onDataUpdate();
+    } else {
+      response?.data?.message &&
+        popAlert("Error!", response?.data?.message, "error");
+    }
+  };
+
+  const handleRejectOrder = async (orderId) => {
+    setIsSaving(true);
+    const response = await rejectOrder(orderId);
+    setIsSaving(false);
+
+    if (response.success) {
+      popAlert("Success!", response?.data?.message, "success");
       onDataUpdate();
     } else {
       response?.data?.message &&
@@ -141,7 +156,7 @@ const ApprovedOrder = ({ order, onDataUpdate }) => {
                 <Typography>Address - {order?.delivery?.address}</Typography>
               </Box>
             </Grid>
-            {order.status !== "confirmed" && (
+            {order.status === "confirmed" && (
               <Grid item xs={12}>
                 <Button
                   variant="contained"
@@ -156,7 +171,32 @@ const ApprovedOrder = ({ order, onDataUpdate }) => {
                   disabled={isSaving}
                 >
                   Complete Order
-                  {!isSaving && (
+                  {isSaving && (
+                    <>
+                      &nbsp;&nbsp;
+                      <CircularProgress size={"24px"} color={"secondary"} />
+                    </>
+                  )}
+                </Button>
+              </Grid>
+            )}
+            {order.status === "requires_customer_confimation" && (
+              <Grid item xs={12}>
+                <Button
+                  variant="contained"
+                  size="large"
+                  fullWidth
+                  onClick={() => handleRejectOrder(order._id)}
+                  sx={{
+                    height: 56,
+                    borderRadius: "8px",
+                    boxShadow: "0px 8px 25px rgba(0, 0, 0, 0.25)",
+                  }}
+                  disabled={isSaving}
+                  color="error"
+                >
+                  Reject Order
+                  {isSaving && (
                     <>
                       &nbsp;&nbsp;
                       <CircularProgress size={"24px"} color={"secondary"} />

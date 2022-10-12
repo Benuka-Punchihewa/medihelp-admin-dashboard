@@ -52,3 +52,16 @@ export const completeOrder = async (orderId, data) => {
 
   return response;
 };
+
+export const rejectOrder = async (orderId, data) => {
+  const response = await getApi()
+    .patch(`/orders/${orderId}/reject`, data)
+    .then((res) => {
+      return buildResponse(true, res.data);
+    })
+    .catch((err) => {
+      return buildResponse(false, err.response.data, err.response.status);
+    });
+
+  return response;
+};
