@@ -16,6 +16,7 @@ import { getOrdersByPharmacy } from "../service/order.service";
 import TableAction from "../components/common/TableActions";
 import UnApprovedOrder from "../components/orders/UnApprovedOrder";
 import ApprovedOrder from "../components/orders/ApprovedOrders";
+import OrderReport from "../components/orders/OrderReport";
 
 const Pharamcies = [
   { label: "Samarasingha Pharamcy", _id: "6312055d361e1bab6496fd32" },
@@ -58,6 +59,12 @@ const Orders = () => {
   const [selectedOrderId, setSelectedOrderId] = useState("");
   const [refresh, setRefresh] = useState(false);
   const [orders, setOrders] = useState([]);
+  const [printComponentRef, setPrintComponentRef] = useState(null);
+  const [reportLoading, setReportLoading] = useState(false);
+
+  const handlePrintComponentRef = (ref) => {
+    setPrintComponentRef(ref);
+  };
 
   const handlePopupClose = () => setShowPopup(false);
 
@@ -164,7 +171,20 @@ const Orders = () => {
           <AddButton />
         </Grid>
         <Grid item xs={1}>
-          <ReportButton />
+          <ReportButton
+            setComponentRef={handlePrintComponentRef}
+            isLoading={reportLoading}
+          >
+            <OrderReport
+              ref={printComponentRef}
+              pharmacyId={selectedPharmacyId}
+              pageMargin={"20mm"}
+              pageHeight={"297mm"}
+              pageWidth={"210mm"}
+              setIsLoading={(loading) => setReportLoading(loading)}
+              title={'somethiong'}
+            />
+          </ReportButton>
         </Grid>
       </Grid>
       {isLoading ? (

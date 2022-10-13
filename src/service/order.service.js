@@ -65,3 +65,16 @@ export const rejectOrder = async (orderId, data) => {
 
   return response;
 };
+
+export const getOrderStats = async (pharmacyId) => {
+  const response = await getApi()
+    .get(`/orders/pharmacies/${pharmacyId}/stats`)
+    .then((res) => {
+      return buildResponse(true, res.data);
+    })
+    .catch((err) => {
+      return buildResponse(false, err.response.data, err.response.status);
+    });
+
+  return response;
+};

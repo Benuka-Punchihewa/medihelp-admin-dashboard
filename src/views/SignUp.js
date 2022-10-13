@@ -55,7 +55,7 @@ const SignUp = () => {
     return () => {
       unmounted = true;
     };
-  }, [confirmPassword]);
+  }, [confirmPassword, RegInputs.password]);
 
   return (
     <React.Fragment>
