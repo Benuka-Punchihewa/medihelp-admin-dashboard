@@ -33,7 +33,7 @@ export const options = {
     },
     title: {
       display: true,
-      text: "Daily Orders",
+      text: "Orders Received in Last 7 Days",
     },
   },
   maintainAspectRatio: true,
@@ -79,7 +79,7 @@ class OrderReport extends React.PureComponent {
       if (dailyOrders) {
         const labels = [];
         const data = [];
-
+        console.log(dailyOrders);
         for (const order of dailyOrders) {
           labels.push(order.day);
           data.push(order.orderCount);
@@ -87,11 +87,11 @@ class OrderReport extends React.PureComponent {
 
         this.setState({
           dailyOrdersChartData: {
-            labels: labels,
+            labels: labels.reverse(),
             datasets: [
               {
                 label: "Orders",
-                data: data,
+                data: data.reverse(),
                 borderColor: "rgb(31, 122, 140)",
                 backgroundColor: "rgba(31, 122, 140, 0.5)",
               },

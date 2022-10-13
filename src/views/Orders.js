@@ -182,7 +182,7 @@ const Orders = () => {
               pageHeight={"297mm"}
               pageWidth={"210mm"}
               setIsLoading={(loading) => setReportLoading(loading)}
-              title={'somethiong'}
+              title={"somethiong"}
             />
           </ReportButton>
         </Grid>
