@@ -1,7 +1,7 @@
 import React from "react";
 import SearchBar from "../components/common/SearchBar";
 import AddButton from "../components/common/AddButton";
-import ReportButton from "../components/common/ReportButton";
+// import ReportButton from "../components/common/ReportButton";
 import { Grid, Typography } from "@mui/material";
 
 const Dashboard = () => {
@@ -19,7 +19,7 @@ const Dashboard = () => {
           <AddButton />
         </Grid>
         <Grid item xs={1}>
-          <ReportButton />
+          {/* <ReportButton /> */}
         </Grid>
       </Grid>
     </React.Fragment>

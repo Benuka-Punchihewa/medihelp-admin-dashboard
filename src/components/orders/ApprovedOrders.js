@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Typography } from "@mui/material";
+import { Button, CircularProgress, Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import ReusableTable from "../common/ReusableTable";
+import { completeOrder, rejectOrder } from "../../service/order.service";
+import { popAlert } from "../../utils/alerts";
 
 const tableColumns = [
   {
@@ -31,8 +33,37 @@ const boxStyles = {
   p: 3,
 };
 
-const ApprovedOrder = ({ order }) => {
+const ApprovedOrder = ({ order, onDataUpdate }) => {
   const [tableRows, setTableRows] = useState([]);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const handleCompleteOrder = async (orderId) => {
+    setIsSaving(true);
+    const response = await completeOrder(orderId);
+    setIsSaving(false);
+
+    if (response.success) {
+      popAlert("Success!", response?.data?.message, "success");
+      onDataUpdate();
+    } else {
+      response?.data?.message &&
+        popAlert("Error!", response?.data?.message, "error");
+    }
+  };
+
+  const handleRejectOrder = async (orderId) => {
+    setIsSaving(true);
+    const response = await rejectOrder(orderId);
+    setIsSaving(false);
+
+    if (response.success) {
+      popAlert("Success!", response?.data?.message, "success");
+      onDataUpdate();
+    } else {
+      response?.data?.message &&
+        popAlert("Error!", response?.data?.message, "error");
+    }
+  };
 
   useEffect(() => {
     let unmounted = false;
@@ -125,6 +156,55 @@ const ApprovedOrder = ({ order }) => {
                 <Typography>Address - {order?.delivery?.address}</Typography>
               </Box>
             </Grid>
+            {order.status === "confirmed" && (
+              <Grid item xs={12}>
+                <Button
+                  variant="contained"
+                  size="large"
+                  fullWidth
+                  onClick={() => handleCompleteOrder(order._id)}
+                  sx={{
+                    height: 56,
+                    borderRadius: "8px",
+                    boxShadow: "0px 8px 25px rgba(0, 0, 0, 0.25)",
+                  }}
+                  disabled={isSaving}
+                >
+                  Complete Order
+                  {isSaving && (
+                    <>
+                      &nbsp;&nbsp;
+                      <CircularProgress size={"24px"} color={"secondary"} />
+                    </>
+                  )}
+                </Button>
+              </Grid>
+            )}
+            {order.status === "requires_customer_confimation" && (
+              <Grid item xs={12}>
+                <Button
+                  variant="contained"
+                  size="large"
+                  fullWidth
+                  onClick={() => handleRejectOrder(order._id)}
+                  sx={{
+                    height: 56,
+                    borderRadius: "8px",
+                    boxShadow: "0px 8px 25px rgba(0, 0, 0, 0.25)",
+                  }}
+                  disabled={isSaving}
+                  color="error"
+                >
+                  Reject Order
+                  {isSaving && (
+                    <>
+                      &nbsp;&nbsp;
+                      <CircularProgress size={"24px"} color={"secondary"} />
+                    </>
+                  )}
+                </Button>
+              </Grid>
+            )}
           </Grid>
         </Grid>
       </Grid>

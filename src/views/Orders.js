@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import SearchBar from "../components/common/SearchBar";
 import AddButton from "../components/common/AddButton";
 import ReportButton from "../components/common/ReportButton";
@@ -16,6 +16,7 @@ import { getOrdersByPharmacy } from "../service/order.service";
 import TableAction from "../components/common/TableActions";
 import UnApprovedOrder from "../components/orders/UnApprovedOrder";
 import ApprovedOrder from "../components/orders/ApprovedOrders";
+import OrderReport from "../components/orders/OrderReport";
 
 const Pharamcies = [
   { label: "Samarasingha Pharamcy", _id: "6312055d361e1bab6496fd32" },
@@ -42,8 +43,6 @@ const tableColumns = [
 ];
 
 const Orders = () => {
-  const ordersRef = useRef([]);
-
   const [showPopup, setShowPopup] = useState(false);
   const [selectedPharmacyId, setSelectedPharmacyId] = useState(
     Pharamcies[0]?._id
@@ -59,6 +58,13 @@ const Orders = () => {
   const [keyword, setKeyword] = useState("");
   const [selectedOrderId, setSelectedOrderId] = useState("");
   const [refresh, setRefresh] = useState(false);
+  const [orders, setOrders] = useState([]);
+  const [printComponentRef, setPrintComponentRef] = useState(null);
+  const [reportLoading, setReportLoading] = useState(false);
+
+  const handlePrintComponentRef = (ref) => {
+    setPrintComponentRef(ref);
+  };
 
   const handlePopupClose = () => setShowPopup(false);
 
@@ -85,8 +91,8 @@ const Orders = () => {
   };
 
   const selectedOrder = useMemo(
-    () => ordersRef.current.find((order) => order._id === selectedOrderId),
-    [selectedOrderId]
+    () => orders.find((order) => order._id === selectedOrderId),
+    [selectedOrderId, orders]
   );
 
   useEffect(() => {
@@ -119,7 +125,7 @@ const Orders = () => {
         if (!unmounted) {
           setTotalElements(response.data.totalElements);
           setTableRows(tableDataArr);
-          ordersRef.current = response.data.content;
+          setOrders(response.data.content);
         }
       } else {
         console.error(response?.data);
@@ -165,7 +171,20 @@ const Orders = () => {
           <AddButton />
         </Grid>
         <Grid item xs={1}>
-          <ReportButton />
+          <ReportButton
+            setComponentRef={handlePrintComponentRef}
+            isLoading={reportLoading}
+          >
+            <OrderReport
+              ref={printComponentRef}
+              pharmacyId={selectedPharmacyId}
+              pageMargin={"20mm"}
+              pageHeight={"297mm"}
+              pageWidth={"210mm"}
+              setIsLoading={(loading) => setReportLoading(loading)}
+              title={"somethiong"}
+            />
+          </ReportButton>
         </Grid>
       </Grid>
       {isLoading ? (
@@ -219,7 +238,10 @@ const Orders = () => {
             onDataUpdate={handleDataUpdate}
           />
         ) : (
-          <ApprovedOrder order={selectedOrder} />
+          <ApprovedOrder
+            order={selectedOrder}
+            onDataUpdate={handleDataUpdate}
+          />
         )}
       </Popup>
     </React.Fragment>

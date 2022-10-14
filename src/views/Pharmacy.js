@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import SearchBar from "../components/common/SearchBar";
 import AddButton from "../components/common/AddButton";
-import ReportButton from "../components/common/ReportButton";
+// import ReportButton from "../components/common/ReportButton";
 import {
   Grid,
   Box,
@@ -177,7 +177,7 @@ const Pharmacy = () => {
           <AddButton onClick={() => setShowPopup(true)} />
         </Grid>
         <Grid item xs={1}>
-          <ReportButton />
+          {/* <ReportButton /> */}
         </Grid>
       </Grid>
 
