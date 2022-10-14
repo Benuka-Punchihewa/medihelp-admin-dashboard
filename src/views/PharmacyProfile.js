@@ -17,18 +17,18 @@ import TableAction from "../components/common/TableActions";
 import { useParams } from "react-router-dom";
 import { getGlobalMedicines } from "../service/globalMedicines.service";
 import { createMedicine, getAllMedicines } from "../service/medicine.service";
-import { popAlert } from "../utils/alerts";
+import { popAlert ,popDangerPrompt} from "../utils/alerts";
 import medicine from "../models/medicine";
 import Popup from "../components/common/Popup";
 import DeleteButton from "../components/common/DeleteButton";
 import EditButton from "../components/common/EditButton";
-import Paper from '@mui/material/Paper';
-import MapGoogal from "./MapGoogal";
+// import Paper from '@mui/material/Paper';
+// import MapGoogal from "./MapGoogal";
 // import DeleteIcon from '@mui/icons-material/Delete';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import { red } from "@mui/material/colors";
-
-
+import { deletePharmacy, getPharmacyById } from "../service/pharmacy.service";
+import {
+  updatePharmacy,
+} from "../service/pharmacy.service";
 
 const tableColumns = [
   {
@@ -63,6 +63,7 @@ const tableColumns = [
 
 const PharmacyProfile = () => {
   const { id } = useParams();
+  
   const timeoutRef = useRef(null);
 
   const [inputs, setInputs] = useState(medicine);
@@ -72,8 +73,10 @@ const PharmacyProfile = () => {
   const [refresh, setRefresh] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [editShowPopup, seteditShowPopup] = useState(false);
-  const [deleteShowPopup, setDeleteShowPopup] = useState(false);
-  
+  const [pharmacydata, setPharmacydata] = useState(""); 
+  const [input, setInput] = useState({});
+  const handlePopupClose = () => setShowPopup(false);
+  const edithandlePopupClose = () => seteditShowPopup(false);
 
   // select medicine
   const [globalMedicines, setGlobalMedicines] = useState([]);
@@ -99,7 +102,6 @@ const PharmacyProfile = () => {
         popAlert("Success!", response?.data?.message, "success").then((res) => {
           setShowPopup(false);
           seteditShowPopup(false);
-          setDeleteShowPopup(false);
         });
     } else {
       response?.data?.message &&
@@ -109,22 +111,63 @@ const PharmacyProfile = () => {
     setIsLoading(false);
   };
 
+   //update pharmacy
+   const updatePharmacyhandleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    const response = await updatePharmacy(id, input);
+    console.log(input)
+    if (response.success) {
+      setRefresh(!refresh);
+      response?.data?.message &&
+        popAlert("Success!", response?.data?.message, "success").then((res) => {
+          seteditShowPopup(false);
+        });
+    } else {
+      response?.data?.message &&
+        popAlert("Error!", response?.data?.message, "error");
+      response?.data?.data && setErrors(response.data.data);
+    }
+    setIsLoading(false);
+  };
+
+  //delete pharmacy
+  const deletePharmacyhandleSubmit = async () => {
+    setIsLoading(true);
+
+    popDangerPrompt("DELETE", "Are You sure you want to delete this pharmacy!" ,"error").then( async (res) =>{
+      if (res.isConfirmed) {
+        
+      const response = await deletePharmacy(id);
+    
+    if (response.success) {
+      response?.data?.message &&
+        popAlert("Success!", response?.data?.message, "success").then((res) => {
+            setShowPopup(false);
+            window.location.replace("/pharmacy")
+        });
+    } else {
+      response?.data?.message &&
+        popAlert("Error!", response?.data?.message, "error");
+      response?.data?.data && setErrors(response.data.data);
+    }
+  }});
+  setIsLoading(false); 
+};
+
+    
+  const handleUpdateClear = () => {
+    setInput(updatePharmacy);
+  };
 
   const handleClear = () => {
     setInputs(medicine);
   };
 
-  const handleCancel = () => {
-    
-  };
-
-  const handleMapInput = (input) =>{
-    setInputs(input);
-  };
-
-  const handlePopupClose = () => setShowPopup(false);
-  const edithandlePopupClose = () => seteditShowPopup(false);
-  const deletehandlePopupClose = () => setDeleteShowPopup(false);
+  // const handleMapInput = (input) =>{
+  //   setInput(input);
+  // };
 
   const handlePageChange = (page) => {
     setPagination({ ...pagination, page: page });
@@ -135,7 +178,7 @@ const PharmacyProfile = () => {
   };
 
   const handleEdit = (id) => {
-    console.log(id);
+    seteditShowPopup(true);
   };
 
   const handleDelete = (id) => {
@@ -158,6 +201,7 @@ const PharmacyProfile = () => {
   
   //select pharmacies
   useEffect(() => {
+    
     let unmounted = false;
 
     if (!unmounted && open) setIsSelectDataLoading(true);
@@ -252,12 +296,35 @@ const PharmacyProfile = () => {
     };
   }, [pagination, refresh, id]);
 
+  //pharmacy find by id
+  useEffect(() => {
+    let unmounted = false;
+
+    const fetchAndSet = async () =>{
+      const response = await getPharmacyById(id);
+
+    if(response.success){
+      if(!unmounted){
+        setPharmacydata(response?.data);
+        setInput(response?.data);
+      }
+    }
+  }
+
+  fetchAndSet();
+
+    return () => {
+      unmounted = true;
+    };
+  }, [id, refresh]);
+
+
   return (
     <React.Fragment>
       <Typography variant="h4" fontWeight="bold" sx={{ mb: 2 }}>
         Pharamacy Profile
       </Typography>
-
+      
       <Box
         sx={{
           borderRadius: 4,
@@ -281,22 +348,22 @@ const PharmacyProfile = () => {
           <Grid container sx={{ ml: 5 }}>
             <Grid item xs={12} md={6}>
               <Box sx={{ marginBottom: "5px", fontWeight: "bold" }}>
-                <Typography variant="p">Osil Pharmacy</Typography>
+                <Typography variant="p">{pharmacydata.name}</Typography>
               </Box>
 
               <Box>
-                <Typography variant="p">GMP-MIR-008</Typography>
+                <Typography variant="p">{pharmacydata.registrationNumber}</Typography>
               </Box>
             </Grid>
             <Grid item xs={12} md={4}>
               <Box sx={{ marginBottom: "5px" }}>
                 <Typography variant="p">
-                  42/1A, Colombo Rd., Kadawatha
+                  {pharmacydata.address}
                 </Typography>
               </Box>
 
               <Box>
-                <Typography variant="p">0332239745</Typography>
+                <Typography variant="p">{pharmacydata.contactNumber}</Typography>
               </Box>
             </Grid>
             
@@ -309,7 +376,7 @@ const PharmacyProfile = () => {
 
             <Grid item xs={12} md={2}>
               <Box sx={{ marginBottom: "5px" }}>
-                <DeleteButton onClick={() => setDeleteShowPopup(true)}/>
+                <DeleteButton onClick={() => deletePharmacyhandleSubmit()}/>
               </Box>
             </Grid>
         </Stack>
@@ -493,7 +560,7 @@ const PharmacyProfile = () => {
         </Box>
       </Popup>
 
-      {/* custom popup */}
+      {/*Update Pharmacy */}
       <Popup
         title="Edit Pharmacy"
         width={800}
@@ -501,17 +568,17 @@ const PharmacyProfile = () => {
         onClose={edithandlePopupClose}
       >
         <Box sx={{ mb: 1 }}>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={updatePharmacyhandleSubmit} >
             <Box sx={{ mb: 1 }}>
               <TextField
                 name="name"
                 variant="filled"
                 label="Enter Name"
                 fullWidth
-                value={inputs.name}
+                value={input.name}
                 onChange={(e) =>
-                  setInputs({
-                    ...inputs,
+                  setInput({
+                    ...input,
                     name: e.target.value,
                   })
                 }
@@ -526,10 +593,10 @@ const PharmacyProfile = () => {
                 variant="filled"
                 label="Enter Registration Number"
                 fullWidth
-                value={inputs.registrationNumber}
+                value={input.registrationNumber}
                 onChange={(e) =>
-                  setInputs({
-                    ...inputs,
+                  setInput({
+                    ...input,
                     registrationNumber: e.target.value,
                   })
                 }
@@ -546,10 +613,10 @@ const PharmacyProfile = () => {
                 variant="filled"
                 label="Enter Address"
                 fullWidth
-                value={inputs.address}
+                value={input.address}
                 onChange={(e) =>
-                  setInputs({
-                    ...inputs,
+                  setInput({
+                    ...input,
                     address: e.target.value,
                   })
                 }
@@ -565,10 +632,10 @@ const PharmacyProfile = () => {
                 variant="filled"
                 label="Enter Contact Number"
                 fullWidth
-                value={inputs.contactNumber}
+                value={input.contactNumber}
                 onChange={(e) =>
-                  setInputs({
-                    ...inputs,
+                  setInput({
+                    ...input,
                     contactNumber: e.target.value,
                   })
                 }
@@ -583,10 +650,10 @@ const PharmacyProfile = () => {
                 variant="filled"
                 label="Enter Email"
                 fullWidth
-                value={inputs.email}
+                value={input.email}
                 onChange={(e) =>
-                  setInputs({
-                    ...inputs,
+                  setInput({
+                    ...input,
                     email: e.target.value,
                   })
                 }
@@ -596,23 +663,23 @@ const PharmacyProfile = () => {
               )}
             </Box>
 
-            <Box sx={{ mb: 1 }}>
+            {/* <Box sx={{ mb: 1 }}>
               <Typography>Select Location</Typography>
                   <Paper elevation={0} sx={{height:200 }} >
-                    <MapGoogal inputs={inputs} OnLocationChange={handleMapInput}/>
+                    <MapGoogal input={input} OnLocationChange={handleMapInput}/>
                   </Paper>
                        
 
                   {errors["location"] && (
                     <Typography color="error">{errors["location"]}</Typography>
                   )}
-            </Box>
+            </Box> */}
 
             <Box sx={{ mb: 2, display: "flex", justifyContent: "flex-end" }}>
               <Button
                 type="reset"
                 variant="contained"
-                onClick={handleClear}
+                onClick={handleUpdateClear}
                 sx={{ py: 2, px: 5, mr: 2, backgroundColor: colors.grey }}
               >
                 Clear
@@ -628,65 +695,7 @@ const PharmacyProfile = () => {
             </Box>
           </form>
         </Box>
-      </Popup>
-
-      {/* custom popup */}
-      <Popup
-        width={600}
-        show={deleteShowPopup}
-        onClose={deletehandlePopupClose}
-      >
-        <Box sx={{textAlign:'center'}}>
-          <DeleteOutlineOutlinedIcon sx={{ color:red[500],fontSize: 60  }}/>
-        </Box>
-
-        <Typography component="div" gutterBottom>
-            <Box sx={{  fontSize: 'h5.fontSize',
-                        fontWeight: 'bold',
-                        color:colors.black,
-                        textAlign:'center',mt:3 }}>
-                    Are You sure you want to delete this pharmacy
-            </Box>
-        </Typography> 
-  
-        <Typography component="div" variant="caption" gutterBottom>
-            <Box sx={{  fontWeight: 'bold',
-                        color:colors.red,
-                        textAlign:'center',mt:3 }}>
-                    Warning! This pharmay cannot be recorved again
-            </Box>
-        </Typography>
-      
-        <Grid container sx={{mt:5}}>
-        <Grid item xs={6}>
-          <Box sx={{  display: "flex", justifyContent: "flex-end",mr:8}}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{ py: 2, px: 5 }}
-                  disabled={isLoading}
-                  color="error"
-                >
-                  {isLoading ? <CircularProgress/> : "Delete"}
-                </Button>
-          </Box> 
-        </Grid>
-        <Grid item xs={6}>
-        <Box sx={{  display: "flex", justifyContent:"flex-start",ml:8}}>
-                  <Button
-                    type="reset"
-                    variant="contained"
-                    onClick={handleCancel}
-                    sx={{ py: 2, px: 5, mr: 2, backgroundColor: colors.grey }}
-                  >
-                    Cancel
-                  </Button>
-            </Box>
-            
-        </Grid>
-      </Grid>
-      
-      </Popup>
+      </Popup>      
     </React.Fragment>
   );
 };

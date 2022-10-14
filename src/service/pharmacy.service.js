@@ -34,9 +34,35 @@ export const getallPharmacies = async (page, limit, orderBy,keyword) => {
   return response;
 };
 
-export const editPharmacy = async (data) => {
+export const getPharmacyById = async(pharmacyId) =>{
   const response = await getApi()
-    .post("/pharmacies", data)
+  .get(`/pharmacies/${pharmacyId}`)
+  .then((res) => {
+    return buildResponse(true, res.data);
+  })
+  .catch((err) => {
+    return buildResponse(false, err.response.data, err.response.status);
+  });
+
+  return response;
+}
+
+export const updatePharmacy = async (pharmacyId,data) => {
+  const response = await getApi()
+    .patch(`/pharmacies/${pharmacyId}`, data)
+    .then((res) => {
+      return buildResponse(true, res.data);
+    })
+    .catch((err) => {
+      return buildResponse(false, err.response.data, err.response.status);
+    });
+
+  return response;
+};
+
+export const deletePharmacy = async (pharmacyId) => {
+  const response = await getApi()
+    .delete(`/pharmacies/${pharmacyId}`)
     .then((res) => {
       return buildResponse(true, res.data);
     })

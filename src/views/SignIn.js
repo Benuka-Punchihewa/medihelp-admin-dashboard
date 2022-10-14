@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import colors from "../assets/styles/colors";
 import signup from "../models/signIn";
-import { createUser } from "../service/signIn.service";
+import { createUser } from "../service/auth.service";
 import { popAlert } from "../utils/alerts";
 import { useDispatch } from "react-redux";
 import { authActions } from "../store/authSlice";

@@ -1,4 +1,5 @@
-import Swal from "sweetalert2";import colors from "../assets/styles/colors";
+import Swal from "sweetalert2";
+import colors from "../assets/styles/colors";
 
 export const popAlert = (title, text, icon, confirmButtonText) => {
   return Swal.fire({
@@ -9,3 +10,16 @@ export const popAlert = (title, text, icon, confirmButtonText) => {
     confirmButtonColor: colors.primary,
   });
 };
+
+export const popDangerPrompt = (title, text, icon) => {
+  return Swal.fire({
+  title: title,
+  text: text,
+  showConfirmButton: true,
+  showCancelButton: true,
+  confirmButtonText: "Yes",
+  cancelButtonText: "No",
+  icon: icon,
+  confirmButtonColor: colors.red,
+  });
+ };

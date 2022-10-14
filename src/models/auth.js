@@ -1,6 +1,6 @@
-const signIn = 
+const auth = 
 {
     "email": "",
     "password": ""
 }
-export default signIn;
+export default auth;

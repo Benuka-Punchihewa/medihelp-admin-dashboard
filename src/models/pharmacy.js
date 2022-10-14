@@ -1,4 +1,4 @@
-const addPharmacy = 
+const Pharmacy = 
 {
     "name" : "",
     "registrationNumber": "",
@@ -10,4 +10,4 @@ const addPharmacy =
         "longitude": ""
     }
 }
-export default addPharmacy;
+export default Pharmacy;

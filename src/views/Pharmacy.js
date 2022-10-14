@@ -12,11 +12,11 @@ import {
 } from "@mui/material";
 import Popup from "../components/common/Popup";
 import ReusableTable from "../components/common/ReusableTable";
-import addPharmacy from "../models/addPharmacy";
 import {
   createPharmacy,
   getallPharmacies,
-} from "../service/addPharmacy.service";
+} from "../service/pharmacy.service";
+import PharmacyModel from "../models/pharmacy";
 import { popAlert } from "../utils/alerts";
 import colors from "../assets/styles/colors";
 import TableAction from "../components/common/TableActions";
@@ -52,7 +52,7 @@ const tableColumns = [
 
 const Pharmacy = () => {
   const navigate = useNavigate();
-  const [inputs, setInputs] = useState(addPharmacy);
+  const [inputs, setInputs] = useState(PharmacyModel);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
@@ -66,10 +66,10 @@ const Pharmacy = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [keyword, setKeyword] = useState("");
-  // const [keyword, setKeyword] = useState("");
-
+  
+ 
   const handleSubmit = async (e) => {
-    console.log(inputs);
+    console.log("Hi");
     e.preventDefault();
     setLoading(true);
 
@@ -94,7 +94,7 @@ const Pharmacy = () => {
   };
 
   const handleClear = () => {
-    setInputs(addPharmacy);
+    setInputs(createPharmacy);
   };
 
   const handleView = (id) => {
