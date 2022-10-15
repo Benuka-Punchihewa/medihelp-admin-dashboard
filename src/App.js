@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Grid, Stack } from "@mui/material";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -14,10 +14,19 @@ import Orders from "./views/Orders";
 import PharmacyProfile from "./views/PharmacyProfile";
 import SignIn from "./views/SignIn";
 import SignUp from "./views/SignUp";
+import { useSelector } from "react-redux";
+import PageNotFound from "./views/PageNotFound";
 // import MapGoogal from "./views/MapGoogal";
 
 const App = () => {
-  if (!window.location.href.includes("auth")) {
+  const authState = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (!window.location.href.includes("auth") && !authState?.isLoggedIn)
+      window.location.replace("/auth/sign-in");
+  }, [authState.isLoggedIn]);
+
+  if (!window.location.href.includes("auth") && authState?.isLoggedIn) {
     return (
       <React.Fragment>
         <Stack flexDirection="row">
@@ -41,6 +50,7 @@ const App = () => {
                     <Route path="/pharmacy/:id" element={<PharmacyProfile />} />
                     <Route path="/orders" element={<Orders />} />
                     {/* <Route path="gap-googal" element={<MapGoogal />}/> */}
+                    <Route path="*" element={<PageNotFound />} />
                   </Routes>
                 </BrowserRouter>
               </Grid>

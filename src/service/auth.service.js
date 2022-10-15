@@ -8,7 +8,12 @@ export const createUser = async (data) => {
         return buildResponse(true, res.data);
       })
       .catch((err) => {
-        return buildResponse(false, err.response.data, err.response.status);
+        return buildResponse(
+          false,
+          err.response.data,
+          err.response.status,
+          err.response.status
+        );
       });
   
     return response;
