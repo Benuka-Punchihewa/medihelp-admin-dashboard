@@ -15,6 +15,7 @@ import PharmacyProfile from "./views/PharmacyProfile";
 import SignIn from "./views/SignIn";
 import SignUp from "./views/SignUp";
 // import MapGoogal from "./views/MapGoogal";
+import PharmacyReport from "./components/orders/PharmacyReport"
 
 const App = () => {
   if (!window.location.href.includes("auth")) {
@@ -40,6 +41,7 @@ const App = () => {
                     />
                     <Route path="/pharmacy/:id" element={<PharmacyProfile />} />
                     <Route path="/orders" element={<Orders />} />
+                    <Route path="/pharmacyReport" element={<PharmacyReport/>}/>
                     {/* <Route path="gap-googal" element={<MapGoogal />}/> */}
                   </Routes>
                 </BrowserRouter>

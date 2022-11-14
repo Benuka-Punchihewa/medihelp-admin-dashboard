@@ -72,3 +72,16 @@ export const deletePharmacy = async (pharmacyId) => {
 
   return response;
 };
+
+export const getPharmacyStats = async (pharmacyId) => {
+  const response = await getApi()
+    .get(`/${pharmacyId}/stats`)
+    .then((res) => {
+      return buildResponse(true, res.data);
+    })
+    .catch((err) => {
+      return buildResponse(false, err.response.data, err.response.status);
+    });
+
+  return response;
+};

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import SearchBar from "../components/common/SearchBar";
 import AddButton from "../components/common/AddButton";
-// import ReportButton from "../components/common/ReportButton";
+import PharmacyReportButton from "../components/common/PharmacyReportButton";
 import {
   Grid,
   Box,
@@ -101,6 +101,9 @@ const Pharmacy = () => {
     navigate(`/pharmacy/${id}`);
   };
 
+  const navigatView = () =>{
+    navigate(`/pharmacyReport`)
+  };
   const handlePageChange = (page) => {
     setPagination({ ...pagination, page: page });
   };
@@ -177,7 +180,7 @@ const Pharmacy = () => {
           <AddButton onClick={() => setShowPopup(true)} />
         </Grid>
         <Grid item xs={1}>
-          {/* <ReportButton /> */}
+          <PharmacyReportButton onClick={navigatView} />
         </Grid>
       </Grid>
 
@@ -351,6 +354,8 @@ const Pharmacy = () => {
           </form>
         </Box>
       </Popup>
+
+
     </React.Fragment>
   );
 };
