@@ -1,17 +1,17 @@
 import React from "react";
-import SearchBar from "../components/common/SearchBar";
-import AddButton from "../components/common/AddButton";
+// import SearchBar from "../components/common/SearchBar";
+// import AddButton from "../components/common/AddButton";
 // import ReportButton from "../components/common/ReportButton";
-import { Grid, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 
 const Dashboard = () => {
-  const handleSearch = (input) => {};
+  // const handleSearch = (input) => {};
   return (
     <React.Fragment>
       <Typography variant="h4" fontWeight="bold" sx={{ mb: 2 }}>
         Dashboard
       </Typography>
-      <Grid container spacing={2}>
+      {/* <Grid container spacing={2}>
         <Grid item xs={10}>
           <SearchBar onSearch={handleSearch} />
         </Grid>
@@ -19,9 +19,8 @@ const Dashboard = () => {
           <AddButton />
         </Grid>
         <Grid item xs={1}>
-          {/* <ReportButton /> */}
         </Grid>
-      </Grid>
+      </Grid> */}
     </React.Fragment>
   );
 };

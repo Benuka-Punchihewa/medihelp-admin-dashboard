@@ -18,8 +18,16 @@ import {
   ListItemText,
 } from "@mui/material";
 import colors from "../../assets/styles/colors";
+import { useDispatch } from "react-redux";
+import { authActions } from "../../store/authSlice";
 
 const Sidebar = () => {
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(authActions.logout());
+  };
+
   return (
     <Box
       position="fixed"
@@ -118,7 +126,11 @@ const Sidebar = () => {
         <Box sx={{ bottom: 0 }}>
           <List>
             <ListItem disablePadding>
-              <ListItemButton component="a" href="#simple-list">
+              <ListItemButton
+                component="a"
+                href="#simple-list"
+                onClick={handleLogout}
+              >
                 <ListItemIcon sx={{ display: { color: colors.white } }}>
                   <Logout />
                 </ListItemIcon>
